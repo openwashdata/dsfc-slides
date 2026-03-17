@@ -1,0 +1,120 @@
+---
+title: "Slide Title"
+subtitle: "Slide Subtitle"
+author: "Author Name"
+date: "2026-03-17"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC Slides"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Add any setup code here (e.g., library calls, data loading)
+```
+
+# Section Title {background-color="#4C326A"}
+
+## Slide with bullet points
+
+- First point
+- Second point
+- Third point
+
+## Slide with incremental bullets
+
+::: {.incremental}
+- This appears first
+- Then this
+- And finally this
+:::
+
+## Slide with code
+
+```{r}
+#| label: example-code
+#| echo: true
+#| eval: false
+
+# Example R code
+library(tidyverse)
+
+data <- tibble(
+  x = 1:10,
+  y = rnorm(10)
+)
+
+ggplot(data, aes(x, y)) +
+  geom_point()
+```
+
+## Slide with a task box
+
+::: {.task}
+**Your turn!**
+
+1. Do this first thing
+2. Then do this second thing
+3. Finally do this third thing
+:::
+
+## Slide with highlighted text
+
+This is normal text with [highlighted in peach]{.highlight-peach} and [highlighted in yellow]{.highlight-yellow} inline.
+
+## Slide with handwritten text
+
+::: {.hand-purple-large}
+Key takeaway!
+:::
+
+## Slide with columns
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Left column**
+
+- Point A
+- Point B
+:::
+
+::: {.column width="50%"}
+**Right column**
+
+- Point C
+- Point D
+:::
+
+::::
+
+## Slide with smaller text {.smaller}
+
+This slide uses smaller text throughout. Useful for slides with more content that needs to fit.
+
+## Slide with an image
+
+![Image caption](path/to/image.png){fig-align="center" width="80%"}
+
+# Another Section {background-color="#4C326A"}
+
+## Learn more
+
+::: {.learn-more}
+[https://example.com](https://example.com)
+:::
+
+## Thank you! {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::

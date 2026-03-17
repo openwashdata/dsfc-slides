@@ -1,0 +1,208 @@
+---
+title: "Welcome"
+subtitle: "Data Science Flipped Classroom - Module 1"
+author: "Adriana Clavijo Daza"
+date: "2026-03-17"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 1"
+editor: source
+execute:
+  freeze: auto
+---
+
+# About me {background-color="#4C326A"}
+
+## Adriana Clavijo Daza
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Data Scientist & Statistician
+- Over 5 years of professional experience
+- More than 10 years using R
+:::
+
+::: {.column width="50%"}
+- Data enthusiast
+- Open source advocate
+:::
+
+::::
+
+# Course introduction {background-color="#4C326A"}
+
+## What is this course about?
+
+A hands-on, project-based program to learn [data analysis and reproducible research]{.highlight-peach} using R and the tidyverse.
+
+. . .
+
+You will learn to:
+
+::: {.incremental}
+- Explore, transform, and visualize data
+- Write reproducible reports with Quarto
+- Use version control with Git and GitHub
+- Apply open science and FAIR data principles
+- Build a data analysis portfolio
+:::
+
+## Course contents
+
+| Module | Topic |
+|--------|-------|
+| 1 | Welcome & course setup |
+| 2 | Data visualization with ggplot2 |
+| 3 | Data transformation with dplyr |
+| 4 | Data import & spreadsheet organization |
+| 5 | Conditions, dates & tables |
+| 6 | Data types, vectors & loops |
+| 7 | Pivoting & joining data |
+| 8 | Publishing with Quarto & GitHub Pages |
+
+# Structure {background-color="#4C326A"}
+
+## How the course works
+
+- **8 modules**, two weeks each
+- Bi-weekly live sessions
+- Assignments & quizzes
+- Capstone project at the end
+
+. . .
+
+::: {.task}
+**Good to know**
+
+- Recordings and slides are available on the course website (ignore the original dates)
+- Sessions are pre-recorded, so we will use the live sessions for Q&A and discussion
+:::
+
+## Calendar {.smaller}
+
+| Module | Start | End | Live session | Time |
+|--------|-------|-----|-------------|------|
+| Module 1 | Mar 02 | Mar 22 | Mar 17 | 13:00 - 14:00 |
+| Module 2 | Mar 23 | Apr 05 | Apr 02 | 14:00 - 16:00 |
+| Module 3 | Apr 13 | Apr 26 | Apr 23 | 14:00 - 16:00 |
+| Module 4 | Apr 27 | May 10 | May 07 | 14:00 - 16:00 |
+| Module 5 | May 11 | May 24 | May 21 | 14:00 - 16:00 |
+| Module 6 | May 25 | Jun 07 | Jun 04 | 14:00 - 16:00 |
+| Module 7 | Jun 08 | Jun 21 | Jun 18 | 14:00 - 16:00 |
+| Module 8 | Jun 22 | Jun 28 | Jun 25 | 14:00 - 16:00 |
+
+## Key dates
+
+| Milestone | Date |
+|-----------|------|
+| Capstone project due | Jul 13, 2026 |
+| Final presentation | Jul 16, 2026 (14:00 - 16:00) |
+
+## Assignments & quizzes {.smaller}
+
+| Module | Assignment due | Quiz due |
+|--------|---------------|----------|
+| Module 1 | Mar 23 | Mar 23 |
+| Module 2 | Apr 13 | Apr 13 |
+| Module 3 | Apr 27 | Apr 27 |
+| Module 4 | May 11 | May 11 |
+| Module 5 | May 25 | May 25 |
+| Module 6 | Jun 08 | Jun 08 |
+| Module 7 | Jun 22 | -- |
+| Module 8 | -- | -- |
+
+# Tools {background-color="#4C326A"}
+
+## Tools we will use
+
+::: {.incremental}
+- **Element** -- for communication (we will avoid email)
+- **Git** -- for version control
+- **GitHub** -- for sharing content and collaboration
+- **Posit Cloud** -- for working with R and RStudio
+:::
+
+# Git & GitHub {background-color="#4C326A"}
+
+## What is Git?
+
+Git is a [version control system]{.highlight-peach} that tracks changes in your files over time.
+
+. . .
+
+Think of it as an **unlimited undo button** for your projects -- you can go back to any previous version, see what changed, and work on different ideas without losing anything.
+
+## What is GitHub?
+
+GitHub is a [web platform]{.highlight-yellow} that hosts Git repositories online.
+
+. . .
+
+It allows you to:
+
+- Share your code with others
+- Collaborate on projects
+- Showcase your work as a portfolio
+- Access other people's code and data
+
+. . .
+
+::: {.hand-purple}
+Git = the tool on your computer. GitHub = the online platform.
+:::
+
+# R {background-color="#4C326A"}
+
+## What is R?
+
+R is a [programming language]{.highlight-peach} designed for data analysis, statistics, and visualization.
+
+. . .
+
+Why R?
+
+- **Free and open source**
+- Thousands of packages for every type of analysis
+- Excellent for creating plots and reports
+- Large and supportive community
+- Widely used in academia and industry
+
+. . .
+
+We will use **RStudio** as our development environment -- it makes working with R much easier.
+
+# Quarto {background-color="#4C326A"}
+
+## What is Quarto?
+
+Quarto is an [open-source publishing system]{.highlight-yellow} that lets you combine code, text, and results into a single document.
+
+. . .
+
+You can create:
+
+- Reports and articles
+- Presentations (like these slides!)
+- Websites and blogs
+- Books
+
+. . .
+
+::: {.task}
+**Why does this matter?**
+
+Quarto enables [reproducible research]{.highlight-peach}: anyone can re-run your analysis and get the same results. No more copy-pasting figures into Word!
+:::
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::
+
+# Let's get started! {background-color="#4C326A"}
