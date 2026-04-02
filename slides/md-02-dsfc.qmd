@@ -1,0 +1,473 @@
+---
+title: "Data visualization"
+subtitle: "Data Science Flipped Classroom - Module 2"
+author: "Adriana Clavijo Daza"
+date: "2026-04-02"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 2"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(ggridges)
+```
+
+# ggplot2 {background-color="#4C326A"}
+
+## What is ggplot2?
+
+ggplot2 is an R package for [data visualization]{.highlight-peach} based on the **Grammar of Graphics**.
+
+. . .
+
+It lets you build plots by combining components in a structured way, like building sentences.
+
+## Grammar of Graphics
+
+Example:
+
+. . .
+
+> "Make a bar chart of sales by region and products."
+
+. . .
+
+In a structured way, translates to:
+
+> "Using the sales data, put region on the x-axis, sales on the y-axis, and group bars by product with a unique color for each region."
+
+. . .
+
+::: {.hand-purple}
+Each part of the sentence maps to a component of the plot.
+:::
+
+# Essential building blocks {background-color="#4C326A"}
+
+## The three essentials
+
+::: {.incremental}
+1. **Data**: a `data.frame` or `tibble`, passed to `ggplot()`
+2. **Aesthetics**: how variables map to visual properties (position, color, size), defined inside `aes()`
+3. **Layers**: where data takes shape (points, lines, bars), added with `geom_*()` or `stat_*()` functions
+:::
+
+. . .
+
+::: {.task}
+**Good to know**
+
+With just these three elements you can already generate a plot!
+:::
+
+## The `mpg` dataset
+
+`mpg` is a dataset included in ggplot2 with fuel economy data for 234 cars from 1999 to 2008.
+
+```{r}
+#| label: mpg-preview
+#| echo: true
+#| eval: true
+
+mpg |>
+  select(manufacturer, model, displ, year, cyl, hwy) |>
+  head(5)
+```
+
+## Example: a basic plot
+
+```{r}
+#| label: basic-plot
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+## Breaking it down
+
+```r
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+. . .
+
+| Component | Code | Role |
+|-----------|------|------|
+| Data | `data = mpg` | The dataset |
+| Aesthetics | `aes(x = displ, y = hwy)` | Map variables to axes |
+| Layer | `geom_point()` | Draw points |
+
+# Additional components {background-color="#4C326A"}
+
+## Scales
+
+[Scales]{.highlight-peach} fine-tune how data is visually represented.
+
+. . .
+
+With `scale_*()` functions you can:
+
+::: {.incremental}
+- Change color palettes and shapes
+- Modify axis labels and limits
+- Control legend behavior
+:::
+
+## Coordinates
+
+[Coordinates]{.highlight-yellow} define the spatial context of the plot.
+
+. . .
+
+With `coord_*()` functions you can:
+
+::: {.incremental}
+- Apply spatial transformations (e.g., `coord_flip()`)
+- Set aspect ratios
+- Zoom into a region of the plot
+:::
+
+## Facets
+
+[Facets]{.highlight-peach} split a plot into multiple panels based on subsets of the data.
+
+. . .
+
+::: {.incremental}
+- `facet_wrap()`: panels from one variable
+- `facet_grid()`: panels from two variable combinations
+:::
+
+. . .
+
+::: {.hand-purple}
+Useful to uncover patterns across groups!
+:::
+
+## Themes
+
+[Themes]{.highlight-yellow} control the overall visual style of the plot.
+
+. . .
+
+::: {.incremental}
+- `theme_*()` functions apply a complete style (e.g., `theme_minimal()`)
+- `theme()` lets you fine-tune individual elements (text, backgrounds, gridlines)
+:::
+
+## The full "sentence"
+
+```{r}
+#| label: full-plot
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| code-line-numbers: "|1|2|3|4|5|6|7"
+#| output-location: slide
+
+ggplot(data = mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement") +
+  scale_y_continuous(name = "Highway MPG") +
+  scale_color_brewer(name = "Class", palette = "Set2") +
+  facet_wrap(~drv) +
+  theme_minimal()
+```
+
+## All the components together {.smaller}
+
+| Component | Function | Purpose |
+|-----------|----------|---------|
+| Data | `ggplot(data)` | The dataset to visualize |
+| Aesthetics | `aes()` | Map variables to visual properties |
+| Layers | `geom_*()` / `stat_*()` | Geometric shapes or summaries |
+| Scales | `scale_*()` | Fine-tune visual mappings |
+| Coordinates | `coord_*()` | Spatial transformations |
+| Facets | `facet_*()` | Split into panels |
+| Themes | `theme_*()` / `theme()` | Visual style |
+
+# Common plot types {background-color="#4C326A"}
+
+## Scatter plot: `geom_point()`
+
+```{r}
+#| label: geom-point
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+## Line plot: `geom_line()`
+
+```{r}
+#| label: geom-line
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line()
+```
+
+## Bar chart: `geom_bar()`
+
+```{r}
+#| label: geom-bar
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(mpg, aes(x = class)) +
+  geom_bar()
+```
+
+## Column chart: `geom_col()`
+
+```{r}
+#| label: geom-col
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+mpg |>
+  count(class) |>
+  ggplot(aes(x = class, y = n)) +
+  geom_col()
+```
+
+::: {.task}
+`geom_bar()` counts for you, `geom_col()` uses values you provide.
+:::
+
+## Histogram: `geom_histogram()`
+
+```{r}
+#| label: geom-histogram
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(mpg, aes(x = hwy)) +
+  geom_histogram(binwidth = 2)
+```
+
+## Box plot: `geom_boxplot()`
+
+```{r}
+#| label: geom-boxplot
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(mpg, aes(x = class, y = hwy)) +
+  geom_boxplot()
+```
+
+## Smooth line: `geom_smooth()`
+
+```{r}
+#| label: geom-smooth
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| message: false
+#| output-location: slide
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth()
+```
+
+::: {.task}
+You can layer multiple `geom_*()` functions on the same plot!
+:::
+
+## Ridge plot: `geom_density_ridges()`
+
+```{r}
+#| label: geom-ridges
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| message: false
+#| output-location: slide
+
+ggplot(mpg, aes(x = hwy, y = class)) +
+  geom_density_ridges()
+```
+
+::: {.task}
+Ridge plots are great for comparing distributions across groups. Requires the `ggridges` package.
+:::
+
+## Summary with `stat_summary()`
+
+```{r}
+#| label: stat-summary
+#| echo: true
+#| eval: true
+#| fig-align: center
+#| output-location: slide
+
+ggplot(mpg, aes(x = class, y = hwy)) +
+  stat_summary(fun = mean, geom = "col") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2)
+```
+
+::: {.task}
+`stat_*()` functions compute summaries before plotting.
+:::
+
+# Choosing the right plot {background-color="#4C326A"}
+
+## What plot should I use?
+
+It depends on the [type of variable]{.highlight-peach} you want to visualize.
+
+## Types of variables
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Non-numerical**
+
+::: {.incremental}
+- **Categorical**: no inherent order (e.g., color, country)
+- **Ordinal**: with a meaningful order (e.g., education level, rating)
+:::
+:::
+
+::: {.column width="50%"}
+**Numerical**
+
+::: {.incremental}
+- **Discrete**: countable values (e.g., number of children)
+- **Continuous**: any value in a range (e.g., temperature, weight)
+:::
+:::
+
+::::
+
+## Can you tell the type?
+
+::: {.hand-purple}
+Does it make sense to do math with this variable?
+:::
+
+## Zip code: 10115, 28001, 75008...
+
+. . .
+
+Looks like a number, but...
+
+. . .
+
+What is the **average zip code**?
+
+. . .
+
+It makes no sense. Zip codes are [categorical]{.highlight-peach}.
+
+## Year: 2019, 2020, 2021...
+
+. . .
+
+It depends on the context!
+
+. . .
+
+- Comparing groups (sales in 2020 vs 2021): [categorical]{.highlight-peach}
+- Tracking change over time: [continuous]{.highlight-yellow}
+
+. . .
+
+::: {.task}
+The same variable can be treated differently depending on your question.
+:::
+
+## Likert scale: 1, 2, 3, 4, 5
+
+. . .
+
+A satisfaction survey asks: "Rate from 1 (very bad) to 5 (excellent)."
+
+. . .
+
+Is the difference between 1 and 2 the same as between 4 and 5?
+
+. . .
+
+Not necessarily. These are [ordinal]{.highlight-peach}, not truly numerical.
+
+## Age group: "18-25", "26-35", "36-45"...
+
+. . .
+
+The values contain numbers, but...
+
+. . .
+
+You can't average "18-25" and "26-35".
+
+. . .
+
+These are [ordinal]{.highlight-peach}: categories with a meaningful order.
+
+## "How many hours did you sleep?" 4, 6, 7, 8...
+
+. . .
+
+Looks continuous, but people usually answer in whole numbers.
+
+. . .
+
+Is "7 hours" really 7.0, or just a rounded estimate?
+
+. . .
+
+In a survey, this is arguably [discrete]{.highlight-yellow}: the responses are countable, even if the underlying variable is continuous.
+
+## Matching variables to plots {.smaller}
+
+| Variables | Plot type | `geom_*()` |
+|-----------|-----------|------------|
+| 1 categorical | Bar chart | `geom_bar()` |
+| 1 continuous | Histogram | `geom_histogram()` |
+| 1 continuous | Density | `geom_density()` |
+| 2 continuous | Scatter plot | `geom_point()` |
+| 2 continuous | Line plot | `geom_line()` |
+| 1 categorical + 1 continuous | Box plot | `geom_boxplot()` |
+| 1 categorical + 1 continuous | Ridge plot | `geom_density_ridges()` |
+| 1 categorical + 1 continuous | Column chart | `geom_col()` |
+| 2 categorical | Stacked/grouped bar | `geom_bar()` |
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::
