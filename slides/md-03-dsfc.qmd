@@ -1,0 +1,681 @@
+---
+title: "Data transformation"
+subtitle: "Data Science Flipped Classroom - Module 3"
+author: "Adriana Clavijo Daza"
+date: "2026-04-23"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 3"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+```
+
+# Base R vs packages {background-color="#4C326A"}
+
+## What is base R?
+
+[Base R]{.highlight-peach} is the set of functions and tools that come installed with R itself.
+
+. . .
+
+It includes:
+
+::: {.incremental}
+- Core data types: vectors, lists, data frames
+- Basic operations: arithmetic, logic, subsetting
+- Built-in functions: `mean()`, `sum()`, `length()`, `summary()`
+- Built-in datasets: `iris`, `mtcars`, `airquality`
+:::
+
+## What is a package?
+
+A [package]{.highlight-yellow} is a collection of functions, data, and documentation that extends R's capabilities.
+
+. . .
+
+::: {.incremental}
+- Developed by the R community
+- Installed from CRAN, GitHub, or other sources
+- Must be loaded before use
+:::
+
+## Installing and loading packages
+
+Install a package **once** with `install.packages()`:
+
+```{r}
+#| label: install-pkg
+#| echo: true
+#| eval: false
+
+install.packages("dplyr")
+```
+
+. . .
+
+Load it **in every session** with `library()`:
+
+```{r}
+#| label: load-pkg
+#| echo: true
+#| eval: false
+
+library(dplyr)
+```
+
+## The tidyverse
+
+The [tidyverse]{.highlight-peach} is a collection of packages designed for data science that share a common philosophy.
+
+. . .
+
+Core packages include: `ggplot2`, `dplyr`, `tidyr`, `readr`, `tibble`, `purrr`, `stringr`, `forcats`, `lubridate`.
+
+. . .
+
+```{r}
+#| label: load-tidyverse
+#| echo: true
+#| eval: false
+
+library(tidyverse)
+```
+
+# R building blocks {background-color="#4C326A"}
+
+## Objects
+
+An [object]{.highlight-peach} is anything you store in R's memory with a name.
+
+. . .
+
+```{r}
+#| label: objects
+#| echo: true
+#| eval: true
+
+x <- 10
+name <- "Adriana"
+numbers <- c(1, 2, 3, 4, 5)
+```
+
+. . .
+
+Once created, you can use the name to access the value.
+
+```{r}
+#| label: use-object
+#| echo: true
+#| eval: true
+
+numbers
+```
+
+## Functions
+
+A [function]{.highlight-yellow} is a reusable block of code that performs a task.
+
+. . .
+
+```{r}
+#| label: function-example
+#| echo: true
+#| eval: true
+
+mean(numbers)
+```
+
+. . .
+
+::: {.task}
+Functions are called by their name followed by parentheses: `function_name()`.
+:::
+
+## Arguments
+
+[Arguments]{.highlight-peach} are the inputs you pass to a function.
+
+. . .
+
+```{r}
+#| label: args-example
+#| echo: true
+#| eval: true
+
+round(3.14159, digits = 2)
+```
+
+. . .
+
+Arguments can be named (`digits = 2`) or positional. Named arguments make your code clearer.
+
+## The assignment operator
+
+Use `<-` to assign a value to an object.
+
+```{r}
+#| label: assign
+#| echo: true
+#| eval: true
+
+age <- 30
+age
+```
+
+. . .
+
+You can also use `=`, but `<-` is the convention in R.
+
+. . .
+
+::: {.task}
+**Keyboard shortcut**
+
+`Alt + -` (Windows/Linux) or `Option + -` (Mac) inserts `<-`.
+:::
+
+## The pipe operator
+
+The [pipe]{.highlight-peach} takes the result on the left and passes it as the first argument to the function on the right.
+
+. . .
+
+Without a pipe:
+
+```{r}
+#| label: no-pipe
+#| echo: true
+#| eval: true
+
+round(mean(c(1, 2, 3, 4, 5)), digits = 2)
+```
+
+. . .
+
+With a pipe, the same operation reads left to right.
+
+## Two pipe flavors
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**magrittr pipe** `%>%`
+
+Comes from the `magrittr` package, loaded with the tidyverse.
+
+```{r}
+#| label: magrittr-pipe
+#| echo: true
+#| eval: true
+
+c(1, 2, 3, 4, 5) %>%
+  mean() %>%
+  round(digits = 2)
+```
+:::
+
+::: {.column width="50%"}
+**base pipe** `|>`
+
+Built into R since version 4.1 (2021). No package needed.
+
+```{r}
+#| label: base-pipe
+#| echo: true
+#| eval: true
+
+c(1, 2, 3, 4, 5) |>
+  mean() |>
+  round(digits = 2)
+```
+:::
+
+::::
+
+## Which pipe to use?
+
+::: {.incremental}
+- For new code, prefer the [base pipe]{.highlight-yellow} `|>`: no dependencies, part of R itself
+- You will see `%>%` in older code and tutorials: they behave almost the same for our purposes
+:::
+
+. . .
+
+::: {.task}
+**Keyboard shortcut**
+
+`Ctrl + Shift + M` (Windows/Linux) or `Cmd + Shift + M` (Mac) inserts a pipe. You can set which one in RStudio preferences.
+:::
+
+# Introducing dplyr {background-color="#4C326A"}
+
+## What is dplyr?
+
+[dplyr]{.highlight-peach} is the tidyverse package for **data processing**.
+
+. . .
+
+It gives you a consistent set of verbs to manipulate data frames: filter rows, select columns, create new variables, compute summaries, and more.
+
+## The four dplyr rules
+
+::: {.incremental}
+1. The **first argument** is always a data frame
+2. The **next arguments** describe what to do with that data frame
+3. It **returns a data frame**
+4. It **does not modify** the original data frame
+:::
+
+. . .
+
+::: {.task}
+These rules are what make dplyr play beautifully with the pipe.
+:::
+
+## Rule 1 and 2: data first, then instructions
+
+```{r}
+#| label: rule-1-2
+#| echo: true
+#| eval: true
+
+filter(starwars, species == "Droid")
+```
+
+. . .
+
+With the pipe, the data frame moves out of the call:
+
+```{r}
+#| label: rule-1-2-pipe
+#| echo: true
+#| eval: false
+
+starwars |>
+  filter(species == "Droid")
+```
+
+## Rule 3: always returns a data frame
+
+This means you can [chain]{.highlight-peach} dplyr functions with the pipe.
+
+```{r}
+#| label: rule-3
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species == "Human") |>
+  select(name, height, mass)
+```
+
+## Rule 4: does not modify the object
+
+```{r}
+#| label: rule-4
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species == "Droid")
+```
+
+. . .
+
+The `starwars` object is unchanged. To keep the result, [assign it]{.highlight-yellow} to a new object.
+
+```{r}
+#| label: rule-4-assign
+#| echo: true
+#| eval: true
+
+droids <- starwars |>
+  filter(species == "Droid")
+```
+
+# The dplyr verbs {background-color="#4C326A"}
+
+## `filter()`: keep rows that match a condition
+
+```{r}
+#| label: filter-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(height > 200)
+```
+
+## `filter()` with comparison operators
+
+| Operator | Meaning |
+|----------|---------|
+| `==` | equal to |
+| `!=` | not equal to |
+| `<`, `<=` | less than (or equal) |
+| `>`, `>=` | greater than (or equal) |
+| `%in%` | value is in a set |
+| `is.na()` | missing value |
+
+## `filter()`: equality and inequality
+
+```{r}
+#| label: filter-eq
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(eye_color == "blue")
+```
+
+## `filter()` with `%in%`
+
+Use `%in%` to match **several values** at once.
+
+```{r}
+#| label: filter-in
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species %in% c("Droid", "Wookiee", "Ewok"))
+```
+
+## `filter()` with multiple conditions
+
+Combine conditions with `&` (and), `|` (or), or a comma (same as `&`).
+
+```{r}
+#| label: filter-multi
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species == "Human", height > 180)
+```
+
+## `select()`: keep or drop columns
+
+```{r}
+#| label: select-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, height, mass)
+```
+
+## `select()` with a minus sign
+
+Use `-` to **drop** columns.
+
+```{r}
+#| label: select-minus
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(-films, -vehicles, -starships)
+```
+
+## `select()` with a range
+
+Use `:` to select a **range** of consecutive columns.
+
+```{r}
+#| label: select-range
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name:eye_color)
+```
+
+## `select()` with helper functions
+
+Functions like `starts_with()`, `ends_with()`, and `contains()` match column names by pattern.
+
+```{r}
+#| label: select-starts
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, starts_with("h"))
+```
+
+. . .
+
+::: {.task}
+Other useful helpers: `ends_with()`, `contains()`, `matches()`, `where()`.
+:::
+
+## `arrange()`: sort rows
+
+```{r}
+#| label: arrange-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  arrange(height)
+```
+
+## `arrange()` in descending order
+
+Wrap a variable in `desc()` to sort from high to low.
+
+```{r}
+#| label: arrange-desc
+#| echo: true
+#| eval: true
+
+starwars |>
+  arrange(desc(height))
+```
+
+## `relocate()`: change column order
+
+By default, `relocate()` moves columns to the **front**.
+
+```{r}
+#| label: relocate-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  relocate(species, homeworld)
+```
+
+## `relocate()` with `.before` and `.after`
+
+```{r}
+#| label: relocate-after
+#| echo: true
+#| eval: true
+
+starwars |>
+  relocate(species, .after = name)
+```
+
+## `rename()`: change column names
+
+New name goes on the **left**, old name on the **right**.
+
+```{r}
+#| label: rename-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  rename(character = name, planet = homeworld)
+```
+
+## `mutate()`: create or modify columns
+
+```{r}
+#| label: mutate-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  mutate(height_m = height / 100) |>
+  select(name, height, height_m)
+```
+
+## `mutate()`: multiple columns at once
+
+```{r}
+#| label: mutate-multi
+#| echo: true
+#| eval: true
+
+starwars |>
+  mutate(
+    height_m = height / 100,
+    bmi = mass / (height_m ^ 2)
+  ) |>
+  select(name, height_m, mass, bmi)
+```
+
+## `transmute()`: mutate and keep only new columns
+
+```{r}
+#| label: transmute-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  transmute(
+    name,
+    height_m = height / 100,
+    bmi = mass / (height / 100) ^ 2
+  )
+```
+
+::: {.task}
+`transmute()` is like `mutate()` followed by `select()`, all in one step.
+:::
+
+## `summarize()`: collapse to summary statistics
+
+```{r}
+#| label: summarize-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  summarize(
+    avg_height = mean(height, na.rm = TRUE),
+    avg_mass = mean(mass, na.rm = TRUE),
+    n = n()
+  )
+```
+
+::: {.task}
+`summarize()` returns one row per group, with the columns you define.
+:::
+
+## `group_by()`: compute by group
+
+`group_by()` on its own does not change the data, but it tells dplyr that subsequent operations should run **per group**.
+
+```{r}
+#| label: group-by
+#| echo: true
+#| eval: true
+
+starwars |>
+  group_by(species) |>
+  summarize(
+    n = n(),
+    avg_height = mean(height, na.rm = TRUE)
+  )
+```
+
+## `group_by()` with multiple variables
+
+```{r}
+#| label: group-by-multi
+#| echo: true
+#| eval: true
+
+starwars |>
+  group_by(species, gender) |>
+  summarize(n = n(), .groups = "drop")
+```
+
+## `count()`: shortcut for grouped counts
+
+`count(x)` is equivalent to `group_by(x) |> summarize(n = n())`.
+
+```{r}
+#| label: count-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  count(species)
+```
+
+## `count()` with sorting
+
+```{r}
+#| label: count-sort
+#| echo: true
+#| eval: true
+
+starwars |>
+  count(species, sort = TRUE)
+```
+
+# The big picture {background-color="#4C326A"}
+
+## Verbs at a glance {.smaller}
+
+| Verb | What it does |
+|------|--------------|
+| `filter()` | Keep rows that match a condition |
+| `select()` | Keep or drop columns |
+| `arrange()` | Sort rows |
+| `relocate()` | Reorder columns |
+| `rename()` | Rename columns |
+| `mutate()` | Create or modify columns |
+| `transmute()` | Create columns, drop the rest |
+| `summarize()` | Collapse to summary statistics |
+| `group_by()` | Compute per group |
+| `count()` | Shortcut for grouped counts |
+
+## Putting it all together
+
+```{r}
+#| label: pipeline
+#| echo: true
+#| eval: true
+#| code-line-numbers: "|1|2|3|4|5|6"
+
+starwars |>
+  filter(!is.na(height), !is.na(mass)) |>
+  mutate(bmi = mass / (height / 100) ^ 2) |>
+  group_by(species) |>
+  summarize(avg_bmi = mean(bmi), n = n()) |>
+  arrange(desc(avg_bmi))
+```
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::
