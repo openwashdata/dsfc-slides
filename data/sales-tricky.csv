@@ -1,0 +1,10 @@
+"Monthly sales report"
+"Generated: 14/05/2026"
+"Amounts in CHF"
+
+product;region;quantity;unit_price;sale_date
+Sensor A;Zurich;12;1.234,50;15/04/2026
+Sensor B;Geneva;7;987,75;16/04/2026
+Sensor A;Bern;N/A;1.234,50;17/04/2026
+Sensor C;Zurich;5;2.500,00;18/04/2026
+Sensor B;Lausanne;9;1.050,25;N/A
