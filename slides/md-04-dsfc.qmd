@@ -1,0 +1,813 @@
+---
+title: "Reading and organizing data"
+subtitle: "Data Science Flipped Classroom - Module 4"
+author: "Adriana Clavijo Daza"
+date: "2026-05-14"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 4"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(readxl)
+```
+
+# Reading data into R {background-color="#4C326A"}
+
+## Why a dedicated package?
+
+Base R already has `read.csv()` and `read.table()`, but the [tidyverse]{.highlight-peach} reading packages have a few advantages:
+
+. . .
+
+::: {.incremental}
+- Faster on large files
+- Return a `tibble` instead of a `data.frame`
+- Preserve column names exactly as written, no `make.names()` mangling
+- Consistent argument names across functions
+- Clear messages about column types and parsing problems
+:::
+
+## Two packages for two formats
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**`readr`**
+
+- For [plain text]{.highlight-peach} formats: CSV, TSV, and other delimited files.
+
+```{r}
+#| label: load-readr
+#| echo: true
+#| eval: false
+
+library(readr)
+```
+:::
+
+::: {.column width="50%"}
+**`readxl`**
+
+- For [Excel]{.highlight-yellow} files: `.xls` and `.xlsx`.
+
+```{r}
+#| label: load-readxl
+#| echo: true
+#| eval: false
+
+library(readxl)
+```
+:::
+
+::::
+
+<br><br>
+
+. . .
+
+Both are part of the tidyverse. `readr` loads with `library(tidyverse)`, but `readxl` must be loaded separately.
+
+# The readr package {background-color="#4C326A"}
+
+## The main reading functions
+
+| Function | Reads files separated by |
+|----------|--------------------------|
+| `read_csv()` | comma `,` |
+| `read_csv2()` | semicolon `;` (comma as decimal mark) |
+| `read_tsv()` | tab |
+| `read_delim()` | any delimiter you specify |
+| `read_fwf()` | fixed width fields |
+| `read_table()` | one or more spaces |
+
+. . .
+
+::: {.task}
+`read_csv2()` is what you usually need for files exported from European versions of Excel.
+:::
+
+## A first read
+
+```{r}
+#| label: read-csv-basic
+#| echo: true
+#| eval: false
+
+penguins <- read_csv("data/penguins.csv")
+```
+
+. . .
+
+- `readr` prints a short summary of the columns it parsed and their types. 
+- It is the easiest way to catch a column that came in as text when you expected a number.
+
+## Key arguments of `read_csv()`
+
+| Argument | What it controls |
+|----------|------------------|
+| `file` | path or URL to the file |
+| `col_names` | column names: `TRUE`, `FALSE`, or a character vector |
+| `col_types` | column types: `NULL` (guess) or a spec |
+| `col_select` | columns to keep, with tidyselect |
+| `na` | strings to treat as missing |
+| `skip` | rows to skip at the top |
+| `n_max` | maximum rows to read |
+| `comment` | character that starts a comment line |
+| `locale` | decimal mark, encoding, time zone |
+
+## Specifying column types
+
+You can let `readr` guess, or you can pin them down with a [short spec]{.highlight-peach}.
+
+```{r}
+#| label: col-types-spec
+#| echo: true
+#| eval: false
+
+penguins <- read_csv(
+  "data/penguins.csv",
+  col_types = "ccddddci"
+)
+```
+
+. . .
+
+The letters mean: `c` character, `d` double, `i` integer, `l` logical, `D` date, `T` datetime, `f` factor, `?` guess, `-` skip.
+
+## Specifying column types, the verbose way
+
+For more control, use `cols()`:
+
+```{r}
+#| label: cols-verbose
+#| echo: true
+#| eval: false
+
+penguins <- read_csv(
+  "data/penguins.csv",
+  col_types = cols(
+    species = col_factor(),
+    island = col_factor(),
+    bill_length_mm = col_double(),
+    year = col_integer()
+  )
+)
+```
+
+## Reading only some columns
+
+```{r}
+#| label: col-select
+#| echo: true
+#| eval: false
+
+read_csv(
+  "data/penguins.csv",
+  col_select = c(species, island, starts_with("bill_"))
+)
+```
+
+. . .
+
+::: {.task}
+`col_select` uses the same helpers as `dplyr::select()`: `starts_with()`, `ends_with()`, `contains()`, ranges with `:`.
+:::
+
+## Locale
+
+European data may use `,` as the decimal separator and `.` as the thousands separator.
+
+```{r}
+#| label: locale-example
+#| echo: true
+#| eval: false
+
+read_csv2(
+  "data/sales-eu.csv",
+  locale = locale(decimal_mark = ",", grouping_mark = ".")
+)
+```
+
+## Writing data with `write_*()`
+
+For every `read_*()` function, there is a [write counterpart]{.highlight-peach}:
+
+| Reading | Writing |
+|---------|---------|
+| `read_csv()` | `write_csv()` |
+| `read_csv2()` | `write_csv2()` |
+| `read_tsv()` | `write_tsv()` |
+| `read_delim()` | `write_delim()` |
+
+## Example
+
+```{r}
+#| label: write-csv
+#| echo: true
+#| eval: false
+
+write_csv(penguins, "data/penguins-clean.csv")
+```
+
+. . .
+
+::: {.task}
+`write_csv()` does **not** write row names and uses `""` for missing values by default. Both choices are deliberate and play well with re-reading the file later.
+:::
+
+# The readxl package {background-color="#4C326A"}
+
+## Reading Excel files
+
+`readxl` handles both `.xls` and `.xlsx` without external dependencies.
+
+| Function | What it reads |
+|----------|---------------|
+| `read_excel()` | guesses from the extension |
+| `read_xls()` | only `.xls` |
+| `read_xlsx()` | only `.xlsx` |
+
+## A first Excel read
+
+```{r}
+#| label: read-excel-basic
+#| echo: true
+#| eval: false
+
+sales <- read_excel("data/sales.xlsx")
+```
+
+. . .
+
+By default, `read_excel()` reads the **first** sheet, treats the first row as column names, and guesses types from the first 1000 rows.
+
+## Key arguments of `read_excel()`
+
+| Argument | What it controls |
+|----------|------------------|
+| `path` | path to the workbook |
+| `sheet` | sheet name or number |
+| `range` | a cell range like `"B3:D87"` |
+| `col_names` | `TRUE`, `FALSE`, or a character vector |
+| `col_types` | type per column |
+| `na` | strings to treat as missing |
+| `skip` | rows to skip at the top |
+| `n_max` | maximum rows to read |
+| `trim_ws` | trim white space around values |
+
+## Picking a sheet
+
+```{r}
+#| label: read-excel-sheets
+#| echo: true
+#| eval: false
+
+read_excel("data/sales.xlsx", sheet = "Q1")
+read_excel("data/sales.xlsx", sheet = 2)
+```
+
+## Picking a cell range
+
+```{r}
+#| label: read-excel-range
+#| echo: true
+#| eval: false
+
+read_excel(
+  "data/sales.xlsx",
+  sheet = "Summary",
+  range = "B3:F50"
+)
+```
+
+. . .
+
+::: {.task}
+`range` is useful when the spreadsheet has titles, blank rows, or notes above the data table. Pick the rectangle of actual data.
+:::
+
+## Specifying column types
+
+`col_types` accepts one value per column from this set:
+
+. . .
+
+`"skip"`, `"guess"`, `"logical"`, `"numeric"`, `"date"`, `"text"`, `"list"`.
+
+```{r}
+#| label: read-excel-types
+#| echo: true
+#| eval: false
+
+read_excel(
+  "data/sales.xlsx",
+  col_types = c("text", "date", "numeric", "numeric")
+)
+```
+
+## Writing Excel files
+
+`readxl` is read-only. To **write** an Excel file, use the companion package [`writexl`]{.highlight-peach}:
+
+```{r}
+#| label: writexl
+#| echo: true
+#| eval: false
+
+library(writexl)
+
+write_xlsx(sales, "data/sales-clean.xlsx")
+```
+
+. . .
+
+::: {.task}
+`writexl::write_xlsx()` can write a list of data frames to multiple sheets in one call: `write_xlsx(list(Q1 = q1, Q2 = q2), "sales.xlsx")`.
+:::
+
+# Categorical variables: factors {background-color="#4C326A"}
+
+## What is a factor?
+
+A [factor]{.highlight-peach} is R's data type for categorical variables.
+
+. . .
+
+Internally, R stores the values as integer codes plus a vector of [levels]{.highlight-yellow} that gives each code a label.
+
+```{r}
+#| label: factor-basic
+#| echo: true
+#| eval: true
+
+cuts <- factor(c("Good", "Ideal", "Fair", "Ideal", "Good"))
+cuts
+```
+
+## Why use factors?
+
+::: {.incremental}
+- They make the **set of allowed values** explicit
+- They control the **order** of categories in tables, plots, and models
+- They help statistical functions know that a variable is categorical
+- They are smaller in memory than repeated character strings
+:::
+
+## The `factor()` function
+
+```{r}
+#| label: factor-args
+#| echo: true
+#| eval: false
+
+factor(
+  x,                 # the data, usually a character vector
+  levels = ...,      # the allowed values, in the order you want
+  labels = levels,   # optional pretty names for the levels
+  ordered = FALSE    # is there a natural ranking?
+)
+```
+
+## Setting levels explicitly
+
+Without `levels`, R picks them in **alphabetical** order, which is rarely what you want.
+
+```{r}
+#| label: factor-default
+#| echo: true
+#| eval: true
+
+factor(c("low", "high", "medium")) |> levels()
+```
+
+. . .
+
+With `levels`, you set the order yourself.
+
+```{r}
+#| label: factor-levels
+#| echo: true
+#| eval: true
+
+factor(
+  c("low", "high", "medium"),
+  levels = c("low", "medium", "high")
+) |> levels()
+```
+
+## Levels also act as a check
+
+Values that are not in `levels` become `NA`.
+
+```{r}
+#| label: factor-na
+#| echo: true
+#| eval: true
+
+factor(
+  c("low", "med", "high"),
+  levels = c("low", "medium", "high")
+)
+```
+
+. . .
+
+::: {.task}
+This is a useful guard against typos in survey data or data entry.
+:::
+
+## Pretty labels
+
+`labels` lets you replace the raw values with clearer names without changing the underlying data.
+
+```{r}
+#| label: factor-labels
+#| echo: true
+#| eval: true
+
+factor(
+  c(1, 2, 1, 3, 2),
+  levels = c(1, 2, 3),
+  labels = c("Low", "Medium", "High")
+)
+```
+
+## Ordered factors
+
+An [ordered factor]{.highlight-peach} adds a natural ranking to the levels.
+
+```{r}
+#| label: ordered-basic
+#| echo: true
+#| eval: true
+
+risk <- factor(
+  c("low", "high", "medium", "low", "high"),
+  levels = c("low", "medium", "high"),
+  ordered = TRUE
+)
+risk
+```
+
+. . .
+
+`ordered(x, levels)` is a shortcut for `factor(x, levels, ordered = TRUE)`.
+
+## Factor vs ordered: comparisons
+
+Ordered factors support `<`, `>`, `<=`, `>=`. Unordered factors do not.
+
+```{r}
+#| label: reminder-vectors
+#| echo: true
+#| eval: true
+
+cuts
+risk
+```
+
+. . .
+
+```{r}
+#| label: ordered-compare
+#| echo: true
+#| eval: true
+
+risk[1] < risk[2]
+```
+
+. . .
+
+```{r}
+#| label: factor-compare
+#| echo: true
+#| eval: true
+#| error: true
+
+cuts[1] < cuts[2]
+```
+
+## Factor vs ordered: in models
+
+When you put a factor in `lm()`, R uses **contrasts** to encode it.
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Unordered factor**
+
+Treatment contrasts: each non-reference level vs a baseline. Coefficients read as "level X minus reference."
+:::
+
+::: {.column width="50%"}
+**Ordered factor**
+
+Polynomial contrasts: linear, quadratic, cubic, ... trends across the ordered levels. Coefficients read as overall shape, not pairwise.
+:::
+
+::::
+
+## A note on `forcats`
+
+The tidyverse package [`forcats`]{.highlight-peach} provides helpers for working with factors:
+
+. . .
+
+::: {.incremental}
+- `fct_relevel()`: change the order of levels by hand
+- `fct_infreq()`: order levels by frequency
+- `fct_reorder()`: order levels by another variable
+- `fct_recode()`: rename levels
+- `fct_lump()`: collapse rare levels into "Other"
+:::
+
+. . .
+
+We will not cover them in detail today, but they are worth knowing about.
+
+# Data organization in spreadsheets {background-color="#4C326A"}
+
+## Why this matters
+
+Most data still arrive as a spreadsheet someone built by hand.
+
+. . .
+
+How that spreadsheet is organized determines whether the data can be read, joined, analyzed, and trusted later, including by you, six months from now.
+
+. . .
+
+The next slides summarize a short, practical paper that has become a standard reference.
+
+## Source
+
+::: {.task}
+**Attribution**
+
+These principles are taken from:
+
+Broman, K. W., & Woo, K. H. (2018). **Data Organization in Spreadsheets**. *The American Statistician*, 72(1), 2-10.
+[https://doi.org/10.1080/00031305.2017.1375989](https://doi.org/10.1080/00031305.2017.1375989)
+
+Companion tutorial: [https://kbroman.org/dataorg/](https://kbroman.org/dataorg/)
+
+All examples and recommendations in this section are theirs. Any errors in the summary are mine.
+:::
+
+## The 12 principles {.smaller}
+
+::: {.incremental}
+1. Be consistent
+2. Choose good names for things
+3. Write dates as `YYYY-MM-DD`
+4. No empty cells
+5. Put just one thing in a cell
+6. Make it a rectangle
+7. Create a data dictionary
+8. No calculations in the raw data files
+9. Do not use font color or highlighting as data
+10. Make backups
+11. Use data validation to avoid data entry errors
+12. Save the data in plain text files
+:::
+
+## 1. Be consistent
+
+Use the **same** spelling, capitalization, and code throughout the file.
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Inconsistent**
+
+`Male`, `male`, `M`, `m`, `1`
+:::
+
+::: {.column width="50%"}
+**Consistent**
+
+`male`, `male`, `male`, `male`, `male`
+:::
+
+::::
+
+. . .
+
+The same applies to missing values, units, ID formats, and date formats. Pick one convention per variable and never break it.
+
+## 2. Choose good names for things
+
+::: {.incremental}
+- No spaces: use `_` or `-`
+- No special characters: `/`, `?`, `%`, `$`, `*`, parentheses
+- Be descriptive but short: `glucose_mg_dl` beats `glu` and `blood_glucose_concentration_milligrams_per_deciliter`
+- Stick to ASCII: avoid accented letters in column names
+:::
+
+## 3. Write dates as `YYYY-MM-DD`
+
+The ISO 8601 format is unambiguous and sorts correctly as text.
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Risky**
+
+`03/04/2025`
+
+(March 4? April 3?)
+:::
+
+::: {.column width="50%"}
+**Safe**
+
+`2025-03-04`
+:::
+
+::::
+
+. . .
+
+::: {.task}
+Excel actively rewrites dates. Store dates as **text** with the `YYYY-MM-DD` format, or as a true date column you control, and check before saving.
+:::
+
+## 4. No empty cells
+
+Empty cells are ambiguous: missing? not applicable? not measured yet?
+
+. . .
+
+::: {.incremental}
+- Use an explicit code for missing: `NA`, or whatever your team agrees on
+- If a header spans many rows visually, **repeat** it on every row
+- Never leave a column blank to mean "same as the row above"
+:::
+
+## 5. Put just one thing in a cell
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**One thing per cell**
+
+| height_cm | weight_kg |
+|-----------|-----------|
+| 172 | 68 |
+:::
+
+::: {.column width="50%"}
+**Two things squeezed in**
+
+| measurements |
+|--------------|
+| 172 cm / 68 kg |
+:::
+
+::::
+
+. . .
+
+If a cell contains units, comments, or a range, those belong in their own column.
+
+## 6. Make it a rectangle
+
+The data should be one rectangle: one header row at the top, one observation per row, one variable per column, no blank rows, no merged cells.
+
+. . .
+
+::: {.task}
+Multi-row headers, side tables, totals at the bottom, and color-coded sub-sections all break the rectangle and break automated reading.
+:::
+
+## 7. Create a data dictionary
+
+A separate file (or sheet) that lists, for **every** variable:
+
+. . .
+
+::: {.incremental}
+- The variable name as it appears in the data
+- A longer human description
+- Units
+- Allowed values or range
+- The code used for missing
+:::
+
+. . .
+
+This is the document a new collaborator should be able to read in five minutes and understand the dataset.
+
+## 8. No calculations in the raw data files
+
+Keep the raw data file [purely for data]{.highlight-peach}.
+
+. . .
+
+::: {.incremental}
+- No formulas, no totals, no derived columns
+- Do calculations in a separate analysis script (R, Python, ...)
+- This way, anyone can reproduce the analysis from the same raw file
+:::
+
+## 9. Font color and highlighting are not data
+
+If yellow rows mean "outlier" and red cells mean "needs review", that information will be lost the moment the file is exported to CSV.
+
+. . .
+
+::: {.task}
+Encode the meaning in a real column: `outlier = TRUE`, `status = "needs_review"`. Then color the cells too if it helps you read the spreadsheet.
+:::
+
+## 10. Make backups
+
+::: {.incremental}
+- Keep multiple copies, in multiple places
+- Use version control (git) for analysis code, and a versioned drive (or git LFS, or a backup service) for data files
+- The raw data file should be **read only** once collected
+:::
+
+## 11. Use data validation
+
+Most spreadsheet programs (Excel, LibreOffice, Google Sheets) let you restrict what can go in a cell:
+
+. . .
+
+::: {.incremental}
+- A drop-down list of allowed categories
+- A numeric range
+- A required date format
+:::
+
+. . .
+
+This catches typos at entry time, when they are cheap to fix.
+
+## 12. Save the data in plain text
+
+Plain text formats (`.csv`, `.tsv`) are:
+
+. . .
+
+::: {.incremental}
+- Readable by every tool, on every system, today and in 30 years
+- Independent of any vendor's file format changes
+- Easy to put under version control and to diff
+:::
+
+. . .
+
+::: {.task}
+Excel `.xlsx` is fine as a working format. The **archived** version of the dataset should be a plain text file with a clearly named encoding.
+:::
+
+## A short checklist before sharing data {.smaller}
+
+::: {.incremental}
+- One rectangle, one header row, one observation per row
+- Consistent codes, consistent missing-value marker, consistent date format
+- Names without spaces or special characters
+- A data dictionary alongside the file
+- No formulas, no formatting that carries meaning
+:::
+
+## Learn more
+
+::: {.learn-more}
+[https://kbroman.org/dataorg/](https://kbroman.org/dataorg/)
+:::
+
+. . .
+
+::: {.task}
+**Reference**
+
+Broman, K. W., & Woo, K. H. (2018). Data Organization in Spreadsheets. *The American Statistician*, 72(1), 2-10.
+:::
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::
