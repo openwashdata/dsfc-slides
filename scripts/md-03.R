@@ -162,28 +162,45 @@ diamonds |>
 
 # putting it together ----
 
-diamonds_ppc_summary <- diamonds |>
+diamonds_ppc <- diamonds |>
   filter(carat >= 1) |>
-  mutate(price_per_carat = price / carat) |>
+  mutate(price_per_carat = price / carat,
+         color   = forcats::fct_rev(color), # reverse order of color
+         cut     = factor(cut,     ordered = FALSE),
+         color   = factor(color,   ordered = FALSE),
+         clarity = factor(clarity, ordered = FALSE))
+
+diamonds_ppc_summary <- diamonds_ppc |>
   group_by(cut) |>
   summarize(avg_ppc = mean(price_per_carat), n = n()) |>
   arrange(desc(avg_ppc))
 
-diamonds_ppc <- diamonds |>
-  filter(carat >= 1) |>
-  mutate(price_per_carat = price / carat) |>
-  mutate(cut = as.character(cut),
-         color = as.character(color),
-         clarity = as.character(clarity))
+# further analysis ----
+# Average price per carat is higher for "Very good" diamond cut than for
+# "Premium": why?
 
-ggplot(diamonds_ppc, aes(x = cut, y = price_per_carat)) +
-  geom_boxplot()
+# Two visualizations
 
-ggplot(diamonds_ppc, aes(x = clarity, y = price_per_carat)) +
-  geom_boxplot()
+diamonds_ppc |>
+  count(cut, clarity) |>
+  group_by(cut) |>
+  mutate(prop = n / sum(n)) |>
+  ggplot(aes(cut, prop, fill = clarity)) +
+  geom_col()
 
-ggplot(diamonds_ppc, aes(x = color, y = price_per_carat)) +
-  geom_boxplot()
+diamonds_ppc |>
+  count(cut, color) |>
+  group_by(cut) |>
+  mutate(prop = n / sum(n)) |>
+  ggplot(aes(cut, prop, fill = color)) +
+  geom_col()
 
-fit <- lm(price_per_carat ~ cut + color + clarity + cut*color + cut*clarity, data = diamonds_ppc)
+# There are more "Very good" than "Premium" diamonds with better color and
+# clarity, let's check it with a linear model
 
+fit <- lm(log(price) ~ log(carat) + cut + color + clarity, data = diamonds_ppc)
+
+broom::tidy(fit, conf.int = TRUE)
+
+# In general, the coefficients of  color and clarity are larger than those of
+# cut meaning they have a greater effect on the price.
