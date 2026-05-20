@@ -1,0 +1,226 @@
+---
+title: "Module 5 exercise"
+subtitle: "Conditions, dates, tables, figures"
+author: "Your name here"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+  eval: false
+---
+
+# Atlantic hurricanes
+
+In this exercise you will pull together everything you have learned so
+far in the course (reading data, transforming, conditions, dates, tables
+and figures) on the `storms` dataset that comes with the `dplyr`
+package.
+
+The dataset records the position and characteristics of Atlantic
+storms between 1975 and 2022. A copy is provided at
+`../data/storms.csv` so you can practise reading it from disk.
+
+Fill in each code chunk where you see `___`. Render the document when
+you are done and check that the table and the figure are numbered, and
+that the cross-references in the last section turn into clickable links.
+
+## Setup
+
+Run the chunk below first. It loads every package you will need.
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(gt)
+library(knitr)
+```
+
+## 1. Read the data
+
+The data file is at `../data/storms.csv`. It is a regular comma-separated
+file, no tricks. Read it with `read_csv()` and store the result in an
+object called `storms`.
+
+```{r}
+#| label: read-data
+
+storms <- read_csv(___)
+
+# A quick check of the columns and their types
+glimpse(storms)
+```
+
+::: {.callout-tip}
+Use `glimpse()` to get an overview of the data.
+:::
+
+## 2. Filter
+
+For the rest of the exercise you will work with the rows where the
+storm reached **hurricane** status, between **2010 and 2022**
+(inclusive).
+
+Fill in the `filter()` call below so that:
+
+- `status` equals `"hurricane"`
+- `year` is at least 2010 and at most 2022
+
+```{r}
+#| label: filter
+
+hurricanes <- storms |>
+  filter(___)
+
+# How many rows did you end up with?
+nrow(hurricanes)
+```
+
+## 3. Mutate: a date and an intensity label
+
+You will now add three new columns to `hurricanes`:
+
+- `date`: a proper `Date` built from `year`, `month` and `day`. Use the
+  `lubridate` helper `make_date()`.
+- `month_name`: the month as a labelled factor. Use `month()` with
+  `label = TRUE` and `abbr = FALSE` for the full name.
+- `intensity`: a label that classifies each row by `wind` (in knots),
+  following the Saffir-Simpson scale:
+
+  | Condition       | Label    |
+  |-----------------|----------|
+  | `wind < 83`     | `"Cat 1"`|
+  | `wind < 96`     | `"Cat 2"`|
+  | `wind < 113`    | `"Cat 3"`|
+  | `wind < 137`    | `"Cat 4"`|
+  | otherwise       | `"Cat 5"`|
+
+  Use `case_when()` to build the labels, then turn the result into a
+  **factor** with `factor(..., levels = ...)`. Setting `levels` in the
+  right order is what keeps the categories sorted from weakest to
+  strongest in tables and plots: no need to make it `ordered = TRUE`
+  unless you actually want to compare categories with `<` or `>`.
+
+```{r}
+#| label: mutate
+
+hurricanes <- hurricanes |>
+  mutate(
+    date       = ___,
+    month_name = ___,
+    intensity  = case_when(
+      ___
+    ),
+    intensity  = factor(intensity, levels = ___)
+  )
+
+hurricanes |>
+  select(name, date, month_name, wind, intensity) |>
+  head(6)
+```
+
+::: {.callout-tip}
+After you finish this step, check that `date` is of class `Date`, and
+that `intensity` is a factor whose `levels()` are the five
+Saffir-Simpson categories in the right order.
+:::
+
+## 4. A summary table
+
+Group `hurricanes` by `intensity` and compute, for each category:
+
+- the number of observations, using `n()`
+- the mean wind speed, using `mean(wind, na.rm = TRUE)`
+- the minimum atmospheric pressure, using `min(pressure, na.rm = TRUE)`
+
+Then **sort the result by mean wind speed in descending order** with
+`arrange(desc(mean_wind))`, so the strongest categories appear at the
+top.
+
+Display the result with either `knitr::kable()` or `gt::gt()`. The chunk
+options below already set a `tbl-` label and a `tbl-cap`, so the table
+will be numbered and you can refer to it later as `@tbl-intensity`.
+
+```{r}
+#| label: tbl-intensity
+#| tbl-cap: "Atlantic hurricanes 2010-2022 by Saffir-Simpson category, sorted by mean wind speed"
+
+hurricanes |>
+  group_by(___) |>
+  summarise(
+    n            = ___,
+    mean_wind    = ___,
+    min_pressure = ___
+  ) |>
+  arrange(___) |>
+  # here add code to print table
+```
+
+::: {.callout-tip}
+Use `knitr::kable(digits = 1)` or `gt()` with `tab_header()`, `cols_label()`, and `fmt_number()`. Keep the chunk label and caption as they are.
+:::
+
+## 5. A visualization
+
+Plot the **storm tracks** on a map of the Atlantic basin.
+
+Build the plot step by step:
+
+- Country outlines come from `map_data("world")`, which needs the
+  `maps` package (install with `install.packages("maps")` if you do
+  not have it yet). The first line of the chunk loads them into a
+  data frame called `world`.
+- In the `ggplot()` call, map `long` to `x` and `lat` to `y`.
+- Draw the coastline first with `geom_polygon()`, using the `world`
+  data, so the storm tracks are drawn on top of it.
+- Use `geom_path()` to connect the positions of each storm, with
+  `aes(group = name)` so each storm gets its own line. Color the
+  lines by `intensity`.
+- `coord_quickmap()` already has reasonable `xlim` and `ylim` for the
+  Atlantic basin: leave those in place.
+- Give the plot a title and informative axis labels.
+
+The chunk options already set a `fig-` label and a `fig-cap`, so you
+will be able to refer to the figure as `@fig-tracks`.
+
+```{r}
+#| label: fig-tracks
+#| fig-cap: "Tracks of Atlantic hurricanes between 2010 and 2022, overlaid on a coastline outline and coloured by Saffir-Simpson category at each point along the track."
+#| fig-width: 8
+#| fig-height: 5
+
+world <- map_data("world")
+
+ggplot(hurricanes, aes(x = ___, y = ___)) +
+  geom_polygon(
+    data = world,
+    aes(x = long, y = lat, group = group),
+    fill = "grey92", color = "white"
+  ) +
+  geom_path(aes(group = ___, color = ___), alpha = 0.6) +
+  coord_quickmap(xlim = c(-110, -10), ylim = c(5, 55)) +
+  labs(
+    title = ___,
+    x     = "Longitude",
+    y     = "Latitude",
+    color = "Category"
+  ) +
+  theme_minimal()
+```
+
+## 6. Write your findings
+
+Replace the two short paragraphs below with your own observations on
+the table and the figure. **Keep the `@tbl-...` and `@fig-...`
+references**, that is what makes Quarto turn them into "Table 1" and
+"Figure 1" with clickable links.
+
+- Loking at @tbl-... 
+- @fig-... shows...
