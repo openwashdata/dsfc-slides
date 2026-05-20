@@ -1,0 +1,875 @@
+---
+title: "Conditions, dates and tables"
+subtitle: "Data Science Flipped Classroom - Module 5"
+author: "Adriana Clavijo Daza"
+date: "2026-05-21"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 5"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(gt)
+library(knitr)
+```
+
+# Logical vectors and comparisons {background-color="#4C326A"}
+
+## Logical values
+
+R has a third atomic type alongside numbers and text: [logical]{.highlight-peach}.
+
+. . .
+
+Two possible values, `TRUE` and `FALSE` (plus `NA` for unknown).
+
+```{r}
+#| label: logical-basic
+#| echo: true
+#| eval: true
+
+c(TRUE, FALSE, TRUE)
+```
+
+. . .
+
+`T` and `F` work but are not reserved words, so they can be overwritten. Always write the full `TRUE` and `FALSE`.
+
+## Why logical vectors matter
+
+Most data questions reduce to:
+
+. . .
+
+::: {.incremental}
+- Which rows match a condition?
+- Which values are missing?
+- Where is the price above 1000?
+:::
+
+. . .
+
+The answer is a logical vector you can pass to `filter()`, `if_else()`, or `case_when()`.
+
+## Comparison operators
+
+| Operator | Meaning |
+|----------|---------|
+| `<` | less than |
+| `<=` | less than or equal to |
+| `>` | greater than |
+| `>=` | greater than or equal to |
+| `==` | equal to |
+| `!=` | not equal to |
+
+. . .
+
+::: {.task}
+A single `=` is for assignment in function calls. Equality is `==`.
+:::
+
+## Comparisons are vectorized
+
+The comparison runs element by element:
+
+```{r}
+#| label: cmp-vec
+#| echo: true
+#| eval: true
+
+x <- c(2, 5, 9, 12)
+x > 5
+```
+
+. . .
+
+Recycling kicks in if one side is shorter:
+
+```{r}
+#| label: cmp-recycle
+#| echo: true
+#| eval: true
+
+y <- c(1, 6, 8, 10)
+x > y
+```
+
+## Equality with decimals
+
+`==` on doubles can surprise you:
+
+```{r}
+#| label: equal-double
+#| echo: true
+#| eval: true
+
+0.1 + 0.2 == 0.3
+```
+
+. . .
+
+Use `near()` for numerical equality:
+
+```{r}
+#| label: equal-near
+#| echo: true
+#| eval: true
+
+near(0.1 + 0.2, 0.3)
+```
+
+## Missing values and `is.na()`
+
+`NA` is contagious. Any comparison with `NA` returns `NA`, not `TRUE` or `FALSE`:
+
+```{r}
+#| label: na-cmp
+#| echo: true
+#| eval: true
+
+NA == NA
+NA > 5
+```
+
+. . .
+
+To test for missingness, use `is.na()`:
+
+```{r}
+#| label: na-test
+#| echo: true
+#| eval: true
+
+x <- c(1, NA, 3, NA)
+is.na(x)
+```
+
+## Membership with `%in%`
+
+`%in%` tests whether each value on the left appears anywhere on the right.
+
+```{r}
+#| label: in-basic
+#| echo: true
+#| eval: true
+
+species <- c("Droid", "Human", "Wookiee", "Droid")
+species %in% c("Human", "Wookiee")
+```
+
+. . .
+
+It is the readable alternative to chaining `==` with `|`:
+
+```{r}
+#| label: in-equiv
+#| echo: true
+#| eval: false
+
+species == "Human" | species == "Wookiee"
+```
+
+## Combining conditions
+
+| Operator | Meaning |
+|----------|---------|
+| `&` | AND, element by element |
+| `|` | OR, element by element |
+| `!` | NOT |
+
+```{r}
+#| label: combine-logical
+#| echo: true
+#| eval: true
+
+x <- c(2, 5, 9, 12)
+x > 3 & x < 10
+```
+
+## A filtering example
+
+```{r}
+#| label: filter-example
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species == "Human", height > 180) |>
+  select(name, height, mass)
+```
+
+. . .
+
+::: {.task}
+Commas in `filter()` mean AND. Use `|` explicitly when you want OR.
+:::
+
+# Conditional values {background-color="#4C326A"}
+
+## From a condition to a value
+
+A comparison gives you a vector of `TRUE` and `FALSE`.
+
+. . .
+
+Often you want to go one step further and assign each row a [different value]{.highlight-peach} depending on the answer.
+
+. . .
+
+That is what `if_else()` and `case_when()` are for.
+
+## `if_else()`
+
+```{r}
+#| label: ifelse-signature
+#| echo: true
+#| eval: false
+
+if_else(condition, true, false, missing = NULL)
+```
+
+. . .
+
+::: {.incremental}
+- `condition`: a logical vector
+- `true`: value returned where the condition is `TRUE`
+- `false`: value returned where the condition is `FALSE`
+- `missing`: optional value used where the condition is `NA`
+:::
+
+## `if_else()` in action
+
+```{r}
+#| label: ifelse-mutate
+#| echo: true
+#| eval: true
+
+starwars |>
+  mutate(size = if_else(height > 180, "tall", "short")) |>
+  select(name, height, size) |>
+  head(4)
+```
+
+## `if_else()` is type-strict
+
+The `true` and `false` branches must return the [same type]{.highlight-peach}.
+
+```{r}
+#| label: ifelse-strict
+#| echo: true
+#| eval: true
+#| error: true
+
+if_else(c(TRUE, FALSE), "yes", 0)
+```
+
+. . .
+
+::: {.task}
+This is a feature, not a bug. Base R's `ifelse()` is more forgiving but can silently change types.
+:::
+
+## `case_when()`
+
+When you need [more than two outcomes]{.highlight-peach}, nested `if_else()` becomes unreadable.
+
+. . .
+
+`case_when()` handles multiple conditions in a flat, ordered list:
+
+```{r}
+#| label: case-when-shape
+#| echo: true
+#| eval: false
+
+case_when(
+  condition_1 ~ value_1,
+  condition_2 ~ value_2,
+  ...
+  .default = fallback
+)
+```
+
+## Reading `case_when()`
+
+For each row, R checks conditions [from top to bottom]{.highlight-peach} and returns the value next to the first `TRUE`.
+
+```{r}
+#| label: case-when-buckets
+#| echo: true
+#| eval: true
+
+starwars |>
+  mutate(
+    size = case_when(
+      height < 150 ~ "small",
+      height < 200 ~ "medium",
+      height >= 200 ~ "large"
+    )
+  ) |>
+  select(name, height, size) |>
+  head(4)
+```
+
+## `.default` and the catch-all
+
+```{r}
+#| label: case-when-default
+#| echo: true
+#| eval: true
+
+x <- c(-1, 5, 12, NA)
+case_when(
+  x < 0  ~ "negative",
+  x < 10 ~ "small",
+  x >= 10 ~ "large",
+  .default = "unknown"
+)
+```
+
+. . .
+
+::: {.task}
+Anything not matched by an explicit condition (including `NA`) falls into `.default`. Without it, those values become `NA`.
+:::
+
+## Order matters
+
+`case_when()` evaluates conditions in order. Put the most specific ones first:
+
+```{r}
+#| label: case-when-order
+#| echo: true
+#| eval: true
+
+age <- c(2, 15, 40, 70)
+case_when(
+  age < 13 ~ "child",
+  age < 20 ~ "teenager",
+  age < 65 ~ "adult",
+  .default = "senior"
+)
+```
+
+. . .
+
+If `age < 65` came first, everyone under 65 would end up as `adult`.
+
+# Dates and times {background-color="#4C326A"}
+
+## Why dates are tricky
+
+::: {.incremental}
+- Different written formats, `2026-06-04` vs `04/06/2026` vs `June 4, 2026`
+- Time zones and daylight saving time
+- Leap years (and leap seconds)
+- 30 vs 31 days in a month
+- Storing dates as text loses arithmetic
+:::
+
+. . .
+
+R has dedicated types so you can do real date math.
+
+## R's date types
+
+| Type | What it stores | Created with |
+|------|----------------|--------------|
+| `Date` | a calendar date | `as_date()`, `ymd()` |
+| `POSIXct` | a date-time, seconds since 1970 | `as_datetime()`, `ymd_hms()` |
+| `POSIXlt` | a date-time as a list of components | `as.POSIXlt()` |
+
+. . .
+
+In daily use you will mostly meet `Date` and `POSIXct`.
+
+## The reference moment
+
+R stores a `Date` as the [number of days]{.highlight-peach} since **1970-01-01**.
+
+```{r}
+#| label: date-internal
+#| echo: true
+#| eval: true
+
+d <- as_date("2026-06-04")
+d
+unclass(d)
+```
+
+. . .
+
+A `POSIXct` is stored as seconds since the same reference moment, in UTC.
+
+## The `lubridate` package
+
+[`lubridate`]{.highlight-peach} is the tidyverse package for working with dates and times.
+
+. . .
+
+It is loaded with the tidyverse:
+
+```{r}
+#| label: load-lubridate
+#| echo: true
+#| eval: false
+
+library(tidyverse)
+```
+
+. . .
+
+Two main families: **parsers** that turn strings into dates, and **accessors** that pull pieces back out.
+
+## Parsing dates from strings
+
+The function name tells you the order of **y**ear, **m**onth, **d**ay:
+
+```{r}
+#| label: parsers
+#| echo: true
+#| eval: true
+
+ymd("2026-06-04")
+dmy("04/06/2026")
+mdy("June 4, 2026")
+```
+
+. . .
+
+Add `_hms`, `_hm`, or `_h` for date-times:
+
+```{r}
+#| label: parser-hms
+#| echo: true
+#| eval: true
+
+ymd_hms("2026-06-04 14:30:00")
+```
+
+## `today()` and `now()`
+
+```{r}
+#| label: today-now
+#| echo: true
+#| eval: true
+
+today()
+now()
+```
+
+. . .
+
+::: {.task}
+`today()` returns a `Date`. 
+
+`now()` returns a `POSIXct` with your system's time zone.
+:::
+
+## Extracting components
+
+| Function | Returns |
+|----------|---------|
+| `year()` | the year |
+| `month()` | the month (number, or label) |
+| `day()` | the day of the month |
+| `hour()` | the hour |
+| `minute()` | the minute |
+| `second()` | the second |
+
+```{r}
+#| label: extract
+#| echo: true
+#| eval: true
+
+d <- ymd("2026-06-04")
+year(d)
+month(d)
+day(d)
+```
+
+## `month()` with labels
+
+```{r}
+#| label: month-label
+#| echo: true
+#| eval: true
+
+d <- ymd("2026-06-04")
+month(d, label = TRUE)
+month(d, label = TRUE, abbr = FALSE)
+```
+
+## Day of week, day of year
+
+```{r}
+#| label: wday-yday
+#| echo: true
+#| eval: true
+
+d <- ymd("2026-06-04")
+
+wday(d)
+wday(d, label = TRUE)
+yday(d)
+```
+
+. . .
+
+::: {.task}
+`wday()` numbers weeks from Sunday by default. Use `week_start = 1` to start on Monday.
+:::
+
+## Converting between types
+
+```{r}
+#| label: convert
+#| echo: true
+#| eval: true
+
+as_date("2026-06-04 14:30:00")
+as_datetime("2026-06-04")
+```
+
+. . .
+
+`as_date()` drops the time. 
+
+`as_datetime()` lifts a date into a date-time at midnight UTC.
+
+## Time zones with `with_tz()`
+
+`with_tz()` shows the [same instant]{.highlight-peach} in another time zone:
+
+```{r}
+#| label: with-tz
+#| echo: true
+#| eval: true
+
+t <- ymd_hms("2026-06-04 14:30:00", tz = "Europe/Zurich")
+t
+with_tz(t, "America/New_York")
+```
+
+. . .
+
+::: {.task}
+Use `force_tz()` if you want to **keep the clock reading** the same and change the zone label, for example to fix data that was tagged with the wrong zone.
+:::
+
+## Date arithmetic
+
+Subtracting two dates gives a [duration]{.highlight-peach}:
+
+```{r}
+#| label: subtract
+#| echo: true
+#| eval: true
+
+ymd("2026-07-15") - ymd("2026-06-04")
+```
+
+. . .
+
+Add days, weeks, or months with `lubridate` helpers:
+
+```{r}
+#| label: add-time
+#| echo: true
+#| eval: true
+
+ymd("2026-06-04") + days(10)
+ymd("2026-06-04") + weeks(2)
+ymd("2026-06-04") + months(1)
+```
+
+# Displaying tables {background-color="#4C326A"}
+
+## Plain printing is not enough
+
+By default, R prints a data frame as plain text:
+
+```{r}
+#| label: plain-print
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, height, mass, species) |>
+  head(3)
+```
+
+. . .
+
+Fine while exploring, not what you want in a [report or paper]{.highlight-peach}.
+
+## Two table packages
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**`knitr::kable()`**
+
+- Already there with every Quarto setup
+- Quick, minimal, works in PDF and HTML
+- Few formatting options
+:::
+
+::: {.column width="50%"}
+**`gt::gt()`**
+
+- A grammar of tables, similar to ggplot
+- Rich formatting: spanners, footnotes, styles
+- Best output in HTML
+:::
+
+::::
+
+. . .
+
+For everyday reports, reach for `kable()`. For publication-quality tables in HTML, reach for `gt`.
+
+## `knitr::kable()`
+
+```{r}
+#| label: kable-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, height, mass, species) |>
+  head(4) |>
+  knitr::kable()
+```
+
+## Key `kable()` arguments
+
+| Argument | What it controls |
+|----------|------------------|
+| `x` | the data |
+| `format` | `"html"`, `"latex"`, `"pipe"`, `"markdown"` |
+| `digits` | number of decimal places |
+| `col.names` | custom column labels |
+| `align` | column alignment: `"l"`, `"c"`, `"r"` |
+| `caption` | table caption |
+
+## `kable()` with formatting
+
+```{r}
+#| label: kable-formatted
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, height, mass, species) |>
+  head(4) |>
+  knitr::kable(
+    col.names = c("Name", "Height (cm)", "Mass (kg)", "Species"),
+    align     = c("l", "r", "r", "l"),
+    digits    = 1
+  )
+```
+
+## `gt::gt()`
+
+```{r}
+#| label: gt-basic
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, height, mass, species) |>
+  head(4) |>
+  gt()
+```
+
+## The anatomy of a gt table
+
+A `gt` table has named parts you can address one at a time:
+
+::: {.incremental}
+- **table header**: title and subtitle
+- **column labels**: the column headers
+- **stub**: a row-label column on the left
+- **body**: the data cells
+- **footer**: footnotes and source notes
+:::
+
+## A more polished gt table
+
+```{r}
+#| label: gt-polished
+#| echo: true
+#| eval: true
+
+starwars |>
+  select(name, height, mass, species) |>
+  head(4) |>
+  gt() |>
+  tab_header(
+    title    = "Star Wars characters",
+    subtitle = "First four rows"
+  ) |>
+  cols_label(
+    name    = "Name",
+    height  = "Height (cm)",
+    mass    = "Mass (kg)",
+    species = "Species"
+  ) |>
+  fmt_number(columns = c(height, mass), decimals = 1)
+```
+
+## Useful gt helpers {.smaller}
+
+| Function | Purpose |
+|----------|---------|
+| `tab_header()` | title and subtitle |
+| `cols_label()` | rename columns for display |
+| `fmt_number()` | format numbers |
+| `fmt_percent()` | format percentages |
+| `fmt_currency()` | format currency |
+| `tab_spanner()` | grouping label across columns |
+| `tab_footnote()` | footnote attached to a cell |
+| `tab_source_note()` | source line at the bottom |
+| `gtsave()` | save as HTML, PNG, or PDF |
+
+# Captions, labels, cross-references {background-color="#4C326A"}
+
+## Why label a table?
+
+In a long document, you often write something like:
+
+. . .
+
+> "See Table 2 for the breakdown by species."
+
+. . .
+
+Quarto can [number tables automatically]{.highlight-peach} and turn `@tbl-species` into "Table 2", with a live link. You just need to label them properly.
+
+## Chunk options for a table
+
+In any code chunk that produces a table, set two options:
+
+````
+```{{r}}
+#| label: tbl-species
+#| tbl-cap: "Average height by species"
+
+starwars |>
+  group_by(species) |>
+  summarise(height = mean(height, na.rm = TRUE)) |>
+  knitr::kable()
+```
+````
+
+. . .
+
+::: {.incremental}
+- `label` **must** start with `tbl-` for Quarto to treat it as a table
+- `tbl-cap` is the caption text
+:::
+
+## Cross-referencing in text
+
+In the document body, refer to the table with `@tbl-species`:
+
+. . .
+
+```markdown
+Average height differs noticeably between species
+(see @tbl-species).
+```
+
+. . .
+
+Quarto renders this as:
+
+. . .
+
+> Average height differs noticeably between species (see Table 1).
+
+## Captions for gt tables
+
+`gt` recognises the chunk's `tbl-cap` option, so the same pattern works:
+
+````
+```{{r}}
+#| label: tbl-starwars-gt
+#| tbl-cap: "Star Wars characters"
+
+starwars |>
+  select(name, height, mass, species) |>
+  head(4) |>
+  gt()
+```
+````
+
+. . .
+
+::: {.task}
+Use the chunk options for the caption, not `tab_header()`, when you want Quarto to handle the numbering and the cross-reference.
+:::
+
+## Sub-captions for several tables
+
+You can lay out [several tables side by side]{.highlight-peach} with sub-labels:
+
+````
+```{{r}}
+#| label: tbl-starwars
+#| tbl-cap: "Star Wars summaries"
+#| tbl-subcap:
+#|   - "By species"
+#|   - "By homeworld"
+#| layout-ncol: 2
+
+starwars |> count(species)   |> knitr::kable()
+starwars |> count(homeworld) |> knitr::kable()
+```
+````
+
+. . .
+
+Cross-reference the pair with `@tbl-starwars`, or a single sub-table with `@tbl-starwars-1`.
+
+## A checklist for nice tables
+
+::: {.incremental}
+- Pick `kable()` for quick, lightweight tables
+- Pick `gt()` for tables that need careful formatting: titles, footnotes, or custom number formats
+- Always set `label` (starting with `tbl-`) and `tbl-cap`
+- Cross-reference with `@tbl-...`, never by typing "Table 2" by hand
+- Format numbers so the reader can compare them at a glance
+:::
+
+## Learn more
+
+::: {.learn-more}
+[https://lubridate.tidyverse.org](https://lubridate.tidyverse.org)
+:::
+
+::: {.learn-more}
+[https://gt.rstudio.com](https://gt.rstudio.com)
+:::
+
+::: {.learn-more}
+[https://quarto.org/docs/authoring/cross-references.html](https://quarto.org/docs/authoring/cross-references.html)
+:::
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::

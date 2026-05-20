@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="md-05-dsfc_files/libs/clipboard/clipboard.min.js"></script>
+<script src="md-05-dsfc_files/libs/quarto-html/tabby.min.js"></script>
+<script src="md-05-dsfc_files/libs/quarto-html/popper.min.js"></script>
+<script src="md-05-dsfc_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="md-05-dsfc_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="md-05-dsfc_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="md-05-dsfc_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.31">
+
+  <meta name="author" content="Adriana Clavijo Daza">
+  <meta name="dcterms.date" content="2026-05-21">
+  <title>Conditions, dates and tables</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="md-05-dsfc_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="md-05-dsfc_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="md-05-dsfc_files/libs/revealjs/dist/theme/quarto-3460a193ad1a6bd02149326f73fe8af0.css">
+  <link href="md-05-dsfc_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="md-05-dsfc_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="md-05-dsfc_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="md-05-dsfc_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="md-05-dsfc_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="md-05-dsfc_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Conditions, dates and tables</h1>
+  <p class="subtitle">Data Science Flipped Classroom - Module 5</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Adriana Clavijo Daza 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-05-21</p>
+</section>
+<section>
+<section id="logical-vectors-and-comparisons" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Logical vectors and comparisons</h1>
+
+</section>
+<section id="logical-values" class="slide level2">
+<h2>Logical values</h2>
+<p>R has a third atomic type alongside numbers and text: <span class="highlight-peach">logical</span>.</p>
+<div class="fragment">
+<p>Two possible values, <code>TRUE</code> and <code>FALSE</code> (plus <code>NA</code> for unknown).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE  TRUE</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><code>T</code> and <code>F</code> work but are not reserved words, so they can be overwritten. Always write the full <code>TRUE</code> and <code>FALSE</code>.</p>
+</div>
+</section>
+<section id="why-logical-vectors-matter" class="slide level2">
+<h2>Why logical vectors matter</h2>
+<p>Most data questions reduce to:</p>
+<div class="fragment">
+<ul>
+<li class="fragment">Which rows match a condition?</li>
+<li class="fragment">Which values are missing?</li>
+<li class="fragment">Where is the price above 1000?</li>
+</ul>
+</div>
+<div class="fragment">
+<p>The answer is a logical vector you can pass to <code>filter()</code>, <code>if_else()</code>, or <code>case_when()</code>.</p>
+</div>
+</section>
+<section id="comparison-operators" class="slide level2">
+<h2>Comparison operators</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&lt;</code></td>
+<td>less than</td>
+</tr>
+<tr class="even">
+<td><code>&lt;=</code></td>
+<td>less than or equal to</td>
+</tr>
+<tr class="odd">
+<td><code>&gt;</code></td>
+<td>greater than</td>
+</tr>
+<tr class="even">
+<td><code>&gt;=</code></td>
+<td>greater than or equal to</td>
+</tr>
+<tr class="odd">
+<td><code>==</code></td>
+<td>equal to</td>
+</tr>
+<tr class="even">
+<td><code>!=</code></td>
+<td>not equal to</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="task">
+<p>A single <code>=</code> is for assignment in function calls. Equality is <code>==</code>.</p>
+</div>
+</div>
+</section>
+<section id="comparisons-are-vectorized" class="slide level2">
+<h2>Comparisons are vectorized</h2>
+<p>The comparison runs element by element:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">12</span>)</span>
+<span id="cb3-2"><a href=""></a>x <span class="sc">&gt;</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE  TRUE</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Recycling kicks in if one side is shorter:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>)</span>
+<span id="cb5-2"><a href=""></a>x <span class="sc">&gt;</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE  TRUE  TRUE</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="equality-with-decimals" class="slide level2">
+<h2>Equality with decimals</h2>
+<p><code>==</code> on doubles can surprise you:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">==</span> <span class="fl">0.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Use <code>near()</code> for numerical equality:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">near</span>(<span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.2</span>, <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="missing-values-and-is.na" class="slide level2">
+<h2>Missing values and <code>is.na()</code></h2>
+<p><code>NA</code> is contagious. Any comparison with <code>NA</code> returns <code>NA</code>, not <code>TRUE</code> or <code>FALSE</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="cn">NA</span> <span class="sc">==</span> <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="cn">NA</span> <span class="sc">&gt;</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>To test for missingness, use <code>is.na()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="cn">NA</span>)</span>
+<span id="cb15-2"><a href=""></a><span class="fu">is.na</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE FALSE  TRUE</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="membership-with-in" class="slide level2">
+<h2>Membership with <code>%in%</code></h2>
+<p><code>%in%</code> tests whether each value on the left appears anywhere on the right.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>species <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Droid"</span>, <span class="st">"Human"</span>, <span class="st">"Wookiee"</span>, <span class="st">"Droid"</span>)</span>
+<span id="cb17-2"><a href=""></a>species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Human"</span>, <span class="st">"Wookiee"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE  TRUE FALSE</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>It is the readable alternative to chaining <code>==</code> with <code>|</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>species <span class="sc">==</span> <span class="st">"Human"</span> <span class="sc">|</span> species <span class="sc">==</span> <span class="st">"Wookiee"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="combining-conditions" class="slide level2">
+<h2>Combining conditions</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&amp;</code></td>
+<td>AND, element by element</td>
+</tr>
+<tr class="even">
+<td><code>|</code></td>
+<td>OR, element by element</td>
+</tr>
+<tr class="odd">
+<td><code>!</code></td>
+<td>NOT</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">12</span>)</span>
+<span id="cb20-2"><a href=""></a>x <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> x <span class="sc">&lt;</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE  TRUE FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="a-filtering-example" class="slide level2">
+<h2>A filtering example</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Human"</span>, height <span class="sc">&gt;</span> <span class="dv">180</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href=""></a>  <span class="fu">select</span>(name, height, mass)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 3
+   name                height  mass
+   &lt;chr&gt;                &lt;int&gt; &lt;dbl&gt;
+ 1 Darth Vader            202 136  
+ 2 Biggs Darklighter      183  84  
+ 3 Obi-Wan Kenobi         182  77  
+ 4 Anakin Skywalker       188  84  
+ 5 Boba Fett              183  78.2
+ 6 Qui-Gon Jinn           193  89  
+ 7 Padmé Amidala          185  45  
+ 8 Ric Olié               183  NA  
+ 9 Quarsh Panaka          183  NA  
+10 Mace Windu             188  84  
+11 Cliegg Lars            183  NA  
+12 Dooku                  193  80  
+13 Bail Prestor Organa    191  NA  
+14 Jango Fett             183  79  
+15 Raymus Antilles        188  79  </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="task">
+<p>Commas in <code>filter()</code> mean AND. Use <code>|</code> explicitly when you want OR.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="conditional-values" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Conditional values</h1>
+
+</section>
+<section id="from-a-condition-to-a-value" class="slide level2">
+<h2>From a condition to a value</h2>
+<p>A comparison gives you a vector of <code>TRUE</code> and <code>FALSE</code>.</p>
+<div class="fragment">
+<p>Often you want to go one step further and assign each row a <span class="highlight-peach">different value</span> depending on the answer.</p>
+</div>
+<div class="fragment">
+<p>That is what <code>if_else()</code> and <code>case_when()</code> are for.</p>
+</div>
+</section>
+<section id="if_else" class="slide level2">
+<h2><code>if_else()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">if_else</span>(condition, true, false, <span class="at">missing =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<ul>
+<li class="fragment"><code>condition</code>: a logical vector</li>
+<li class="fragment"><code>true</code>: value returned where the condition is <code>TRUE</code></li>
+<li class="fragment"><code>false</code>: value returned where the condition is <code>FALSE</code></li>
+<li class="fragment"><code>missing</code>: optional value used where the condition is <code>NA</code></li>
+</ul>
+</div>
+</section>
+<section id="if_else-in-action" class="slide level2">
+<h2><code>if_else()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">size =</span> <span class="fu">if_else</span>(height <span class="sc">&gt;</span> <span class="dv">180</span>, <span class="st">"tall"</span>, <span class="st">"short"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href=""></a>  <span class="fu">select</span>(name, height, size) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  name           height size 
+  &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;
+1 Luke Skywalker    172 short
+2 C-3PO             167 short
+3 R2-D2              96 short
+4 Darth Vader       202 tall </code></pre>
+</div>
+</div>
+</section>
+<section id="if_else-is-type-strict" class="slide level2">
+<h2><code>if_else()</code> is type-strict</h2>
+<p>The <code>true</code> and <code>false</code> branches must return the <span class="highlight-peach">same type</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">if_else</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="st">"yes"</span>, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `if_else()`:
+! Can't combine `true` &lt;character&gt; and `false` &lt;double&gt;.</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="task">
+<p>This is a feature, not a bug. Base R’s <code>ifelse()</code> is more forgiving but can silently change types.</p>
+</div>
+</div>
+</section>
+<section id="case_when" class="slide level2">
+<h2><code>case_when()</code></h2>
+<p>When you need <span class="highlight-peach">more than two outcomes</span>, nested <code>if_else()</code> becomes unreadable.</p>
+<div class="fragment">
+<p><code>case_when()</code> handles multiple conditions in a flat, ordered list:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">case_when</span>(</span>
+<span id="cb29-2"><a href=""></a>  condition_1 <span class="sc">~</span> value_1,</span>
+<span id="cb29-3"><a href=""></a>  condition_2 <span class="sc">~</span> value_2,</span>
+<span id="cb29-4"><a href=""></a>  ...</span>
+<span id="cb29-5"><a href=""></a>  <span class="at">.default =</span> fallback</span>
+<span id="cb29-6"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="reading-case_when" class="slide level2">
+<h2>Reading <code>case_when()</code></h2>
+<p>For each row, R checks conditions <span class="highlight-peach">from top to bottom</span> and returns the value next to the first <code>TRUE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb30-3"><a href=""></a>    <span class="at">size =</span> <span class="fu">case_when</span>(</span>
+<span id="cb30-4"><a href=""></a>      height <span class="sc">&lt;</span> <span class="dv">150</span> <span class="sc">~</span> <span class="st">"small"</span>,</span>
+<span id="cb30-5"><a href=""></a>      height <span class="sc">&lt;</span> <span class="dv">200</span> <span class="sc">~</span> <span class="st">"medium"</span>,</span>
+<span id="cb30-6"><a href=""></a>      height <span class="sc">&gt;=</span> <span class="dv">200</span> <span class="sc">~</span> <span class="st">"large"</span></span>
+<span id="cb30-7"><a href=""></a>    )</span>
+<span id="cb30-8"><a href=""></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb30-9"><a href=""></a>  <span class="fu">select</span>(name, height, size) <span class="sc">|&gt;</span></span>
+<span id="cb30-10"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  name           height size  
+  &lt;chr&gt;           &lt;int&gt; &lt;chr&gt; 
+1 Luke Skywalker    172 medium
+2 C-3PO             167 medium
+3 R2-D2              96 small 
+4 Darth Vader       202 large </code></pre>
+</div>
+</div>
+</section>
+<section id="default-and-the-catch-all" class="slide level2">
+<h2><code>.default</code> and the catch-all</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">12</span>, <span class="cn">NA</span>)</span>
+<span id="cb32-2"><a href=""></a><span class="fu">case_when</span>(</span>
+<span id="cb32-3"><a href=""></a>  x <span class="sc">&lt;</span> <span class="dv">0</span>  <span class="sc">~</span> <span class="st">"negative"</span>,</span>
+<span id="cb32-4"><a href=""></a>  x <span class="sc">&lt;</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">"small"</span>,</span>
+<span id="cb32-5"><a href=""></a>  x <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">"large"</span>,</span>
+<span id="cb32-6"><a href=""></a>  <span class="at">.default =</span> <span class="st">"unknown"</span></span>
+<span id="cb32-7"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "negative" "small"    "large"    "unknown" </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="task">
+<p>Anything not matched by an explicit condition (including <code>NA</code>) falls into <code>.default</code>. Without it, those values become <code>NA</code>.</p>
+</div>
+</div>
+</section>
+<section id="order-matters" class="slide level2">
+<h2>Order matters</h2>
+<p><code>case_when()</code> evaluates conditions in order. Put the most specific ones first:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>age <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">15</span>, <span class="dv">40</span>, <span class="dv">70</span>)</span>
+<span id="cb34-2"><a href=""></a><span class="fu">case_when</span>(</span>
+<span id="cb34-3"><a href=""></a>  age <span class="sc">&lt;</span> <span class="dv">13</span> <span class="sc">~</span> <span class="st">"child"</span>,</span>
+<span id="cb34-4"><a href=""></a>  age <span class="sc">&lt;</span> <span class="dv">20</span> <span class="sc">~</span> <span class="st">"teenager"</span>,</span>
+<span id="cb34-5"><a href=""></a>  age <span class="sc">&lt;</span> <span class="dv">65</span> <span class="sc">~</span> <span class="st">"adult"</span>,</span>
+<span id="cb34-6"><a href=""></a>  <span class="at">.default =</span> <span class="st">"senior"</span></span>
+<span id="cb34-7"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "child"    "teenager" "adult"    "senior"  </code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>If <code>age &lt; 65</code> came first, everyone under 65 would end up as <code>adult</code>.</p>
+</div>
+</section></section>
+<section>
+<section id="dates-and-times" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Dates and times</h1>
+
+</section>
+<section id="why-dates-are-tricky" class="slide level2">
+<h2>Why dates are tricky</h2>
+<ul>
+<li class="fragment">Different written formats, <code>2026-06-04</code> vs <code>04/06/2026</code> vs <code>June 4, 2026</code></li>
+<li class="fragment">Time zones and daylight saving time</li>
+<li class="fragment">Leap years (and leap seconds)</li>
+<li class="fragment">30 vs 31 days in a month</li>
+<li class="fragment">Storing dates as text loses arithmetic</li>
+</ul>
+<div class="fragment">
+<p>R has dedicated types so you can do real date math.</p>
+</div>
+</section>
+<section id="rs-date-types" class="slide level2">
+<h2>R’s date types</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 44%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>What it stores</th>
+<th>Created with</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Date</code></td>
+<td>a calendar date</td>
+<td><code>as_date()</code>, <code>ymd()</code></td>
+</tr>
+<tr class="even">
+<td><code>POSIXct</code></td>
+<td>a date-time, seconds since 1970</td>
+<td><code>as_datetime()</code>, <code>ymd_hms()</code></td>
+</tr>
+<tr class="odd">
+<td><code>POSIXlt</code></td>
+<td>a date-time as a list of components</td>
+<td><code>as.POSIXlt()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>In daily use you will mostly meet <code>Date</code> and <code>POSIXct</code>.</p>
+</div>
+</section>
+<section id="the-reference-moment" class="slide level2">
+<h2>The reference moment</h2>
+<p>R stores a <code>Date</code> as the <span class="highlight-peach">number of days</span> since <strong>1970-01-01</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>d <span class="ot">&lt;-</span> <span class="fu">as_date</span>(<span class="st">"2026-06-04"</span>)</span>
+<span id="cb36-2"><a href=""></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">unclass</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20608</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>A <code>POSIXct</code> is stored as seconds since the same reference moment, in UTC.</p>
+</div>
+</section>
+<section id="the-lubridate-package" class="slide level2">
+<h2>The <code>lubridate</code> package</h2>
+<p><span class="highlight-peach"><code>lubridate</code></span> is the tidyverse package for working with dates and times.</p>
+<div class="fragment">
+<p>It is loaded with the tidyverse:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>Two main families: <strong>parsers</strong> that turn strings into dates, and <strong>accessors</strong> that pull pieces back out.</p>
+</div>
+</section>
+<section id="parsing-dates-from-strings" class="slide level2">
+<h2>Parsing dates from strings</h2>
+<p>The function name tells you the order of <strong>y</strong>ear, <strong>m</strong>onth, <strong>d</strong>ay:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"04/06/2026"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="fu">mdy</span>(<span class="st">"June 4, 2026"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04"</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Add <code>_hms</code>, <code>_hm</code>, or <code>_h</code> for date-times:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a><span class="fu">ymd_hms</span>(<span class="st">"2026-06-04 14:30:00"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04 14:30:00 UTC"</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="today-and-now" class="slide level2">
+<h2><code>today()</code> and <code>now()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-05-20"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="fu">now</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-05-20 15:09:48 CEST"</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="task">
+<p><code>today()</code> returns a <code>Date</code>.</p>
+<p><code>now()</code> returns a <code>POSIXct</code> with your system’s time zone.</p>
+</div>
+</div>
+</section>
+<section id="extracting-components" class="slide level2">
+<h2>Extracting components</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>year()</code></td>
+<td>the year</td>
+</tr>
+<tr class="even">
+<td><code>month()</code></td>
+<td>the month (number, or label)</td>
+</tr>
+<tr class="odd">
+<td><code>day()</code></td>
+<td>the day of the month</td>
+</tr>
+<tr class="even">
+<td><code>hour()</code></td>
+<td>the hour</td>
+</tr>
+<tr class="odd">
+<td><code>minute()</code></td>
+<td>the minute</td>
+</tr>
+<tr class="even">
+<td><code>second()</code></td>
+<td>the second</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>d <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>)</span>
+<span id="cb53-2"><a href=""></a><span class="fu">year</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2026</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a><span class="fu">month</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a><span class="fu">day</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+</section>
+<section id="month-with-labels" class="slide level2">
+<h2><code>month()</code> with labels</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a>d <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>)</span>
+<span id="cb59-2"><a href=""></a><span class="fu">month</span>(d, <span class="at">label =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Jun
+12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a><span class="fu">month</span>(d, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] June
+12 Levels: January &lt; February &lt; March &lt; April &lt; May &lt; June &lt; ... &lt; December</code></pre>
+</div>
+</div>
+</section>
+<section id="day-of-week-day-of-year" class="slide level2">
+<h2>Day of week, day of year</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a>d <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>)</span>
+<span id="cb63-2"><a href=""></a></span>
+<span id="cb63-3"><a href=""></a><span class="fu">wday</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a><span class="fu">wday</span>(d, <span class="at">label =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Thu
+Levels: Sun &lt; Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a><span class="fu">yday</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 155</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="task">
+<p><code>wday()</code> numbers weeks from Sunday by default. Use <code>week_start = 1</code> to start on Monday.</p>
+</div>
+</div>
+</section>
+<section id="converting-between-types" class="slide level2">
+<h2>Converting between types</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="fu">as_date</span>(<span class="st">"2026-06-04 14:30:00"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a><span class="fu">as_datetime</span>(<span class="st">"2026-06-04"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04 UTC"</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><code>as_date()</code> drops the time.</p>
+<p><code>as_datetime()</code> lifts a date into a date-time at midnight UTC.</p>
+</div>
+</section>
+<section id="time-zones-with-with_tz" class="slide level2">
+<h2>Time zones with <code>with_tz()</code></h2>
+<p><code>with_tz()</code> shows the <span class="highlight-peach">same instant</span> in another time zone:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a>t <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(<span class="st">"2026-06-04 14:30:00"</span>, <span class="at">tz =</span> <span class="st">"Europe/Zurich"</span>)</span>
+<span id="cb73-2"><a href=""></a>t</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04 14:30:00 CEST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a><span class="fu">with_tz</span>(t, <span class="st">"America/New_York"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-04 08:30:00 EDT"</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="task">
+<p>Use <code>force_tz()</code> if you want to <strong>keep the clock reading</strong> the same and change the zone label, for example to fix data that was tagged with the wrong zone.</p>
+</div>
+</div>
+</section>
+<section id="date-arithmetic" class="slide level2">
+<h2>Date arithmetic</h2>
+<p>Subtracting two dates gives a <span class="highlight-peach">duration</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2026-07-15"</span>) <span class="sc">-</span> <span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 41 days</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Add days, weeks, or months with <code>lubridate</code> helpers:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-14"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>) <span class="sc">+</span> <span class="fu">weeks</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-06-18"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2026-06-04"</span>) <span class="sc">+</span> <span class="fu">months</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-07-04"</code></pre>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="displaying-tables" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Displaying tables</h1>
+
+</section>
+<section id="plain-printing-is-not-enough" class="slide level2">
+<h2>Plain printing is not enough</h2>
+<p>By default, R prints a data frame as plain text:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb85-2"><a href=""></a>  <span class="fu">select</span>(name, height, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb85-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+  name           height  mass species
+  &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;  
+1 Luke Skywalker    172    77 Human  
+2 C-3PO             167    75 Droid  
+3 R2-D2              96    32 Droid  </code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Fine while exploring, not what you want in a <span class="highlight-peach">report or paper</span>.</p>
+</div>
+</section>
+<section id="two-table-packages" class="slide level2">
+<h2>Two table packages</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong><code>knitr::kable()</code></strong></p>
+<ul>
+<li>Already there with every Quarto setup</li>
+<li>Quick, minimal, works in PDF and HTML</li>
+<li>Few formatting options</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong><code>gt::gt()</code></strong></p>
+<ul>
+<li>A grammar of tables, similar to ggplot</li>
+<li>Rich formatting: spanners, footnotes, styles</li>
+<li>Best output in HTML</li>
+</ul>
+</div></div>
+<div class="fragment">
+<p>For everyday reports, reach for <code>kable()</code>. For publication-quality tables in HTML, reach for <code>gt</code>.</p>
+</div>
+</section>
+<section id="knitrkable" class="slide level2">
+<h2><code>knitr::kable()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb87-2"><a href=""></a>  <span class="fu">select</span>(name, height, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb87-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb87-4"><a href=""></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">height</th>
+<th style="text-align: right;">mass</th>
+<th style="text-align: left;">species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Luke Skywalker</td>
+<td style="text-align: right;">172</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: left;">Human</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C-3PO</td>
+<td style="text-align: right;">167</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">Droid</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">R2-D2</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: left;">Droid</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Darth Vader</td>
+<td style="text-align: right;">202</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: left;">Human</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="key-kable-arguments" class="slide level2">
+<h2>Key <code>kable()</code> arguments</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td>the data</td>
+</tr>
+<tr class="even">
+<td><code>format</code></td>
+<td><code>"html"</code>, <code>"latex"</code>, <code>"pipe"</code>, <code>"markdown"</code></td>
+</tr>
+<tr class="odd">
+<td><code>digits</code></td>
+<td>number of decimal places</td>
+</tr>
+<tr class="even">
+<td><code>col.names</code></td>
+<td>custom column labels</td>
+</tr>
+<tr class="odd">
+<td><code>align</code></td>
+<td>column alignment: <code>"l"</code>, <code>"c"</code>, <code>"r"</code></td>
+</tr>
+<tr class="even">
+<td><code>caption</code></td>
+<td>table caption</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="kable-with-formatting" class="slide level2">
+<h2><code>kable()</code> with formatting</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb88-2"><a href=""></a>  <span class="fu">select</span>(name, height, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb88-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb88-4"><a href=""></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb88-5"><a href=""></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Name"</span>, <span class="st">"Height (cm)"</span>, <span class="st">"Mass (kg)"</span>, <span class="st">"Species"</span>),</span>
+<span id="cb88-6"><a href=""></a>    <span class="at">align     =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"l"</span>),</span>
+<span id="cb88-7"><a href=""></a>    <span class="at">digits    =</span> <span class="dv">1</span></span>
+<span id="cb88-8"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: right;">Height (cm)</th>
+<th style="text-align: right;">Mass (kg)</th>
+<th style="text-align: left;">Species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Luke Skywalker</td>
+<td style="text-align: right;">172</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: left;">Human</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C-3PO</td>
+<td style="text-align: right;">167</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">Droid</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">R2-D2</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: left;">Droid</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Darth Vader</td>
+<td style="text-align: right;">202</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: left;">Human</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="gtgt" class="slide level2">
+<h2><code>gt::gt()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb89-2"><a href=""></a>  <span class="fu">select</span>(name, height, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb89-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb89-4"><a href=""></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="mhqpuydjrs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mhqpuydjrs table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mhqpuydjrs thead, #mhqpuydjrs tbody, #mhqpuydjrs tfoot, #mhqpuydjrs tr, #mhqpuydjrs td, #mhqpuydjrs th {
+  border-style: none;
+}
+
+#mhqpuydjrs p {
+  margin: 0;
+  padding: 0;
+}
+
+#mhqpuydjrs .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mhqpuydjrs .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mhqpuydjrs .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mhqpuydjrs .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mhqpuydjrs .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mhqpuydjrs .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mhqpuydjrs .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mhqpuydjrs .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mhqpuydjrs .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mhqpuydjrs .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mhqpuydjrs .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mhqpuydjrs .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mhqpuydjrs .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mhqpuydjrs .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mhqpuydjrs .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mhqpuydjrs .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mhqpuydjrs .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mhqpuydjrs .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mhqpuydjrs .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mhqpuydjrs .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mhqpuydjrs .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mhqpuydjrs .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mhqpuydjrs .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mhqpuydjrs .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mhqpuydjrs .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mhqpuydjrs .gt_left {
+  text-align: left;
+}
+
+#mhqpuydjrs .gt_center {
+  text-align: center;
+}
+
+#mhqpuydjrs .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mhqpuydjrs .gt_font_normal {
+  font-weight: normal;
+}
+
+#mhqpuydjrs .gt_font_bold {
+  font-weight: bold;
+}
+
+#mhqpuydjrs .gt_font_italic {
+  font-style: italic;
+}
+
+#mhqpuydjrs .gt_super {
+  font-size: 65%;
+}
+
+#mhqpuydjrs .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mhqpuydjrs .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mhqpuydjrs .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mhqpuydjrs .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mhqpuydjrs .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mhqpuydjrs .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mhqpuydjrs .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#mhqpuydjrs .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mhqpuydjrs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">name</th>
+<th id="height" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">height</th>
+<th id="mass" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">mass</th>
+<th id="species" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">species</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="name">Luke Skywalker</td>
+<td class="gt_row gt_right" headers="height">172</td>
+<td class="gt_row gt_right" headers="mass">77</td>
+<td class="gt_row gt_left" headers="species">Human</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="name">C-3PO</td>
+<td class="gt_row gt_right" headers="height">167</td>
+<td class="gt_row gt_right" headers="mass">75</td>
+<td class="gt_row gt_left" headers="species">Droid</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="name">R2-D2</td>
+<td class="gt_row gt_right" headers="height">96</td>
+<td class="gt_row gt_right" headers="mass">32</td>
+<td class="gt_row gt_left" headers="species">Droid</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="name">Darth Vader</td>
+<td class="gt_row gt_right" headers="height">202</td>
+<td class="gt_row gt_right" headers="mass">136</td>
+<td class="gt_row gt_left" headers="species">Human</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="the-anatomy-of-a-gt-table" class="slide level2">
+<h2>The anatomy of a gt table</h2>
+<p>A <code>gt</code> table has named parts you can address one at a time:</p>
+<ul>
+<li class="fragment"><strong>table header</strong>: title and subtitle</li>
+<li class="fragment"><strong>column labels</strong>: the column headers</li>
+<li class="fragment"><strong>stub</strong>: a row-label column on the left</li>
+<li class="fragment"><strong>body</strong>: the data cells</li>
+<li class="fragment"><strong>footer</strong>: footnotes and source notes</li>
+</ul>
+</section>
+<section id="a-more-polished-gt-table" class="slide level2">
+<h2>A more polished gt table</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb90-2"><a href=""></a>  <span class="fu">select</span>(name, height, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb90-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb90-4"><a href=""></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb90-5"><a href=""></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb90-6"><a href=""></a>    <span class="at">title    =</span> <span class="st">"Star Wars characters"</span>,</span>
+<span id="cb90-7"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"First four rows"</span></span>
+<span id="cb90-8"><a href=""></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb90-9"><a href=""></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb90-10"><a href=""></a>    <span class="at">name    =</span> <span class="st">"Name"</span>,</span>
+<span id="cb90-11"><a href=""></a>    <span class="at">height  =</span> <span class="st">"Height (cm)"</span>,</span>
+<span id="cb90-12"><a href=""></a>    <span class="at">mass    =</span> <span class="st">"Mass (kg)"</span>,</span>
+<span id="cb90-13"><a href=""></a>    <span class="at">species =</span> <span class="st">"Species"</span></span>
+<span id="cb90-14"><a href=""></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb90-15"><a href=""></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(height, mass), <span class="at">decimals =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="hnjgxqbwra" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hnjgxqbwra table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#hnjgxqbwra thead, #hnjgxqbwra tbody, #hnjgxqbwra tfoot, #hnjgxqbwra tr, #hnjgxqbwra td, #hnjgxqbwra th {
+  border-style: none;
+}
+
+#hnjgxqbwra p {
+  margin: 0;
+  padding: 0;
+}
+
+#hnjgxqbwra .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#hnjgxqbwra .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hnjgxqbwra .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hnjgxqbwra .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hnjgxqbwra .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hnjgxqbwra .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hnjgxqbwra .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hnjgxqbwra .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hnjgxqbwra .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#hnjgxqbwra .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#hnjgxqbwra .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hnjgxqbwra .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hnjgxqbwra .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hnjgxqbwra .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hnjgxqbwra .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hnjgxqbwra .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#hnjgxqbwra .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#hnjgxqbwra .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#hnjgxqbwra .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hnjgxqbwra .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#hnjgxqbwra .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hnjgxqbwra .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hnjgxqbwra .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hnjgxqbwra .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hnjgxqbwra .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hnjgxqbwra .gt_left {
+  text-align: left;
+}
+
+#hnjgxqbwra .gt_center {
+  text-align: center;
+}
+
+#hnjgxqbwra .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hnjgxqbwra .gt_font_normal {
+  font-weight: normal;
+}
+
+#hnjgxqbwra .gt_font_bold {
+  font-weight: bold;
+}
+
+#hnjgxqbwra .gt_font_italic {
+  font-style: italic;
+}
+
+#hnjgxqbwra .gt_super {
+  font-size: 65%;
+}
+
+#hnjgxqbwra .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#hnjgxqbwra .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#hnjgxqbwra .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#hnjgxqbwra .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#hnjgxqbwra .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#hnjgxqbwra .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#hnjgxqbwra .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#hnjgxqbwra .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#hnjgxqbwra div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="4" class="gt_heading gt_title gt_font_normal">Star Wars characters</th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">First four rows</th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Name</th>
+<th id="height" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Height (cm)</th>
+<th id="mass" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mass (kg)</th>
+<th id="species" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Species</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="name">Luke Skywalker</td>
+<td class="gt_row gt_right" headers="height">172.0</td>
+<td class="gt_row gt_right" headers="mass">77.0</td>
+<td class="gt_row gt_left" headers="species">Human</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="name">C-3PO</td>
+<td class="gt_row gt_right" headers="height">167.0</td>
+<td class="gt_row gt_right" headers="mass">75.0</td>
+<td class="gt_row gt_left" headers="species">Droid</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="name">R2-D2</td>
+<td class="gt_row gt_right" headers="height">96.0</td>
+<td class="gt_row gt_right" headers="mass">32.0</td>
+<td class="gt_row gt_left" headers="species">Droid</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="name">Darth Vader</td>
+<td class="gt_row gt_right" headers="height">202.0</td>
+<td class="gt_row gt_right" headers="mass">136.0</td>
+<td class="gt_row gt_left" headers="species">Human</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="useful-gt-helpers" class="slide level2 smaller">
+<h2>Useful gt helpers</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tab_header()</code></td>
+<td>title and subtitle</td>
+</tr>
+<tr class="even">
+<td><code>cols_label()</code></td>
+<td>rename columns for display</td>
+</tr>
+<tr class="odd">
+<td><code>fmt_number()</code></td>
+<td>format numbers</td>
+</tr>
+<tr class="even">
+<td><code>fmt_percent()</code></td>
+<td>format percentages</td>
+</tr>
+<tr class="odd">
+<td><code>fmt_currency()</code></td>
+<td>format currency</td>
+</tr>
+<tr class="even">
+<td><code>tab_spanner()</code></td>
+<td>grouping label across columns</td>
+</tr>
+<tr class="odd">
+<td><code>tab_footnote()</code></td>
+<td>footnote attached to a cell</td>
+</tr>
+<tr class="even">
+<td><code>tab_source_note()</code></td>
+<td>source line at the bottom</td>
+</tr>
+<tr class="odd">
+<td><code>gtsave()</code></td>
+<td>save as HTML, PNG, or PDF</td>
+</tr>
+</tbody>
+</table>
+</section></section>
+<section>
+<section id="captions-labels-cross-references" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Captions, labels, cross-references</h1>
+
+</section>
+<section id="why-label-a-table" class="slide level2">
+<h2>Why label a table?</h2>
+<p>In a long document, you often write something like:</p>
+<div class="fragment">
+<blockquote>
+<p>“See Table 2 for the breakdown by species.”</p>
+</blockquote>
+</div>
+<div class="fragment">
+<p>Quarto can <span class="highlight-peach">number tables automatically</span> and turn <code>@tbl-species</code> into “Table 2”, with a live link. You just need to label them properly.</p>
+</div>
+</section>
+<section id="chunk-options-for-a-table" class="slide level2">
+<h2>Chunk options for a table</h2>
+<p>In any code chunk that produces a table, set two options:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb91-1"><a href=""></a><span class="in">```{r}</span></span>
+<span id="cb91-2"><a href=""></a><span class="co">#| label: tbl-species</span></span>
+<span id="cb91-3"><a href=""></a><span class="co">#| tbl-cap: "Average height by species"</span></span>
+<span id="cb91-4"><a href=""></a></span>
+<span id="cb91-5"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb91-6"><a href=""></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="cb91-7"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb91-8"><a href=""></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb91-9"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<ul>
+<li class="fragment"><code>label</code> <strong>must</strong> start with <code>tbl-</code> for Quarto to treat it as a table</li>
+<li class="fragment"><code>tbl-cap</code> is the caption text</li>
+</ul>
+</div>
+</section>
+<section id="cross-referencing-in-text" class="slide level2">
+<h2>Cross-referencing in text</h2>
+<p>In the document body, refer to the table with <code>@tbl-species</code>:</p>
+<div class="fragment">
+<div class="sourceCode" id="cb92"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb92-1"><a href=""></a>Average height differs noticeably between species</span>
+<span id="cb92-2"><a href=""></a>(see @tbl-species).</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>Quarto renders this as:</p>
+</div>
+<div class="fragment">
+<blockquote>
+<p>Average height differs noticeably between species (see Table 1).</p>
+</blockquote>
+</div>
+</section>
+<section id="captions-for-gt-tables" class="slide level2">
+<h2>Captions for gt tables</h2>
+<p><code>gt</code> recognises the chunk’s <code>tbl-cap</code> option, so the same pattern works:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb93-1"><a href=""></a><span class="in">```{r}</span></span>
+<span id="cb93-2"><a href=""></a><span class="co">#| label: tbl-starwars-gt</span></span>
+<span id="cb93-3"><a href=""></a><span class="co">#| tbl-cap: "Star Wars characters"</span></span>
+<span id="cb93-4"><a href=""></a></span>
+<span id="cb93-5"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb93-6"><a href=""></a>  <span class="fu">select</span>(name, height, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb93-7"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb93-8"><a href=""></a>  <span class="fu">gt</span>()</span>
+<span id="cb93-9"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<div class="task">
+<p>Use the chunk options for the caption, not <code>tab_header()</code>, when you want Quarto to handle the numbering and the cross-reference.</p>
+</div>
+</div>
+</section>
+<section id="sub-captions-for-several-tables" class="slide level2">
+<h2>Sub-captions for several tables</h2>
+<p>You can lay out <span class="highlight-peach">several tables side by side</span> with sub-labels:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb94-1"><a href=""></a><span class="in">```{r}</span></span>
+<span id="cb94-2"><a href=""></a><span class="co">#| label: tbl-starwars</span></span>
+<span id="cb94-3"><a href=""></a><span class="co">#| tbl-cap: "Star Wars summaries"</span></span>
+<span id="cb94-4"><a href=""></a><span class="co">#| tbl-subcap:</span></span>
+<span id="cb94-5"><a href=""></a><span class="co">#|   - "By species"</span></span>
+<span id="cb94-6"><a href=""></a><span class="co">#|   - "By homeworld"</span></span>
+<span id="cb94-7"><a href=""></a><span class="co">#| layout-ncol: 2</span></span>
+<span id="cb94-8"><a href=""></a></span>
+<span id="cb94-9"><a href=""></a>starwars <span class="sc">|&gt;</span> <span class="fu">count</span>(species)   <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb94-10"><a href=""></a>starwars <span class="sc">|&gt;</span> <span class="fu">count</span>(homeworld) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb94-11"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>Cross-reference the pair with <code>@tbl-starwars</code>, or a single sub-table with <code>@tbl-starwars-1</code>.</p>
+</div>
+</section>
+<section id="a-checklist-for-nice-tables" class="slide level2">
+<h2>A checklist for nice tables</h2>
+<ul>
+<li class="fragment">Pick <code>kable()</code> for quick, lightweight tables</li>
+<li class="fragment">Pick <code>gt()</code> for tables that need careful formatting: titles, footnotes, or custom number formats</li>
+<li class="fragment">Always set <code>label</code> (starting with <code>tbl-</code>) and <code>tbl-cap</code></li>
+<li class="fragment">Cross-reference with <code>@tbl-...</code>, never by typing “Table 2” by hand</li>
+<li class="fragment">Format numbers so the reader can compare them at a glance</li>
+</ul>
+</section>
+<section id="learn-more" class="slide level2">
+<h2>Learn more</h2>
+<div class="learn-more">
+<p><a href="https://lubridate.tidyverse.org">https://lubridate.tidyverse.org</a></p>
+</div>
+<div class="learn-more">
+<p><a href="https://gt.rstudio.com">https://gt.rstudio.com</a></p>
+</div>
+<div class="learn-more">
+<p><a href="https://quarto.org/docs/authoring/cross-references.html">https://quarto.org/docs/authoring/cross-references.html</a></p>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-color="#4C326A">
+<h2></h2>
+<div class="hand-purple-large">
+<p>Questions?</p>
+</div>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>DSFC - Module 5</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="md-05-dsfc_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="md-05-dsfc_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
