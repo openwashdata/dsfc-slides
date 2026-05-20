@@ -5,7 +5,7 @@ Slides and R scripts for the **Data Science Flipped Classroom (DSFC)** course: a
 ## What's in here
 
 - `slides/` : Quarto source files for the slide decks (`md-01-dsfc.qmd`, `md-02-dsfc.qmd`, ...) and their rendered HTML  and PDF versions. The `.scss` file holds the shared theme.
-- `scripts/` : R scripts that go alongside each module (`md-02.R`, `md-03.R`, ...), with the code used in the live sessions.
+- `exercises/` : R scripts that go alongside each module (`md-02.R`, `md-03.R`, ...), with the code used in the live sessions.
 - `dsfc.Rproj` : RStudio project file, in case you want to open everything at once.
 
 ## Viewing the slides
