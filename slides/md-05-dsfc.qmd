@@ -844,14 +844,75 @@ starwars |> count(homeworld) |> knitr::kable()
 
 Cross-reference the pair with `@tbl-starwars`, or a single sub-table with `@tbl-starwars-1`.
 
-## A checklist for nice tables
+## The same pattern for figures
+
+Figures use the [same mechanism]{.highlight-peach}, with a `fig-` prefix instead:
+
+````
+```{{r}}
+#| label: fig-height-mass
+#| fig-cap: "Height vs mass of Star Wars characters"
+
+starwars |>
+  ggplot(aes(height, mass)) +
+  geom_point()
+```
+````
+
+. . .
 
 ::: {.incremental}
-- Pick `kable()` for quick, lightweight tables
-- Pick `gt()` for tables that need careful formatting: titles, footnotes, or custom number formats
-- Always set `label` (starting with `tbl-`) and `tbl-cap`
-- Cross-reference with `@tbl-...`, never by typing "Table 2" by hand
+- `label` **must** start with `fig-`
+- `fig-cap` is the caption text
+:::
+
+## Cross-referencing figures
+
+Refer to a figure with `@fig-...`:
+
+```markdown
+Height and mass are positively correlated
+(see @fig-height-mass).
+```
+
+. . .
+
+Quarto renders this as:
+
+. . .
+
+> Height and mass are positively correlated (see Figure 1).
+
+## Several figures side by side
+
+Use `fig-subcap` and `layout-ncol`, just like for tables:
+
+````
+```{{r}}
+#| label: fig-starwars
+#| fig-cap: "Distributions of body measurements"
+#| fig-subcap:
+#|   - "Height"
+#|   - "Mass"
+#| layout-ncol: 2
+
+ggplot(starwars, aes(height)) + geom_histogram()
+ggplot(starwars, aes(mass))   + geom_histogram()
+```
+````
+
+. . .
+
+Cross-reference the pair with `@fig-starwars`, or a single panel with `@fig-starwars-1`.
+
+## A checklist for nice tables and figures
+
+::: {.incremental}
+- Pick `kable()` for quick tables, `gt()` for ones that need polish
+- Always set `label` (`tbl-` or `fig-`) and a caption (`tbl-cap` or `fig-cap`)
+- Cross-reference with `@tbl-...` or `@fig-...`, never by typing "Table 2" or "Figure 1" by hand
 - Format numbers so the reader can compare them at a glance
+- Tables and figures both renumber themselves when you move them around
 :::
 
 ## Learn more
