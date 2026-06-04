@@ -1,0 +1,660 @@
+---
+title: "Data types, structures and loops"
+subtitle: "Data Science Flipped Classroom - Module 6"
+author: "Adriana Clavijo Daza"
+date: "2026-06-04"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 6"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+```
+
+# Quarto refresher {background-color="#4C326A"}
+
+## The three components of a `.qmd` file
+
+::: {.incremental}
+- **YAML header**: metadata and options between `---` fences at the top
+- **Markdown text**: headings, prose, lists, links
+- **Code chunks**: executable R code between ```` ```{r} ```` fences
+:::
+
+. . .
+
+Quarto runs the chunks, weaves the results into the text, and renders everything to HTML, PDF, or slides.
+
+## The YAML header
+
+```yaml
+---
+title: "My analysis"
+author: "Adriana Clavijo Daza"
+date: "2026-06-04"
+format: html
+execute:
+  echo: true
+---
+```
+
+. . .
+
+::: {.task}
+Indentation matters in YAML. Two spaces, never tabs.
+:::
+
+## Code chunk options
+
+Options go inside the chunk, each on its own line starting with `#|`:
+
+````
+```{{r}}
+#| label: my-chunk
+#| echo: true
+#| warning: false
+
+mean(c(1, 2, 3))
+```
+````
+
+## The most useful chunk options
+
+| Option | Effect |
+|--------|--------|
+| `label` | names the chunk, useful for navigation and errors |
+| `echo` | show the code itself |
+| `eval` | run the code |
+| `include` | show any output at all |
+| `warning` | show warnings |
+| `message` | show messages |
+| `error` | render even if the chunk errors |
+
+## Options for cross-references
+
+Remember from module 5: two options turn a chunk's output into a [numbered, linkable]{.highlight-peach} table or figure.
+
+````
+```{{r}}
+#| label: fig-height-mass
+#| fig-cap: "Height vs mass of Star Wars characters"
+
+starwars |>
+  ggplot(aes(height, mass)) +
+  geom_point()
+```
+````
+
+. . .
+
+::: {.incremental}
+- `label` **must** start with `fig-` (figures) or `tbl-` (tables)
+- Pair it with `fig-cap` or `tbl-cap`
+- Refer to it in the text with `@fig-height-mass`
+:::
+
+# Data types in R {background-color="#4C326A"}
+
+## The four basic types
+
+Every value in R has a [type]{.highlight-peach}. The four you will meet daily:
+
+| Type | Examples |
+|------|----------|
+| `character` | `"hello"`, `"42"` |
+| `integer` | `1L`, `42L` |
+| `double` | `1.5`, `42`, `pi` |
+| `logical` | `TRUE`, `FALSE`, `NA` |
+
+. . .
+
+::: {.task}
+`integer` and `double` together are the **numeric** types.
+:::
+
+## Checking the type with `typeof()`
+
+```{r}
+#| label: typeof-basics
+#| echo: true
+#| eval: true
+
+typeof("hello")
+typeof(1L)
+typeof(1.5)
+typeof(TRUE)
+```
+
+## Integer or double?
+
+A plain number is a [double]{.highlight-peach} by default, even without decimals:
+
+```{r}
+#| label: double-default
+#| echo: true
+#| eval: true
+
+typeof(42)
+```
+
+. . .
+
+The `L` suffix asks for an integer explicitly:
+
+```{r}
+#| label: integer-suffix
+#| echo: true
+#| eval: true
+
+typeof(42L)
+typeof(1:10)
+```
+
+. . .
+
+::: {.task}
+Sequences made with `:` are integers. In practice the difference rarely matters; R converts between them silently.
+:::
+
+## Coercion: mixing types
+
+A vector can hold [only one type]{.highlight-peach}. When you mix, R converts everything to the most flexible type:
+
+```{r}
+#| label: coercion
+#| echo: true
+#| eval: true
+
+c(1, "two", TRUE)
+c(1, TRUE, FALSE)
+```
+
+. . .
+
+The hierarchy: `logical` → `integer` → `double` → `character`.
+
+. . .
+
+::: {.task}
+This is why a single text entry in a spreadsheet column can turn a whole column of numbers into text after import.
+:::
+
+## Explicit conversion
+
+The `as.*()` family converts on demand:
+
+```{r}
+#| label: as-family
+#| echo: true
+#| eval: true
+
+as.numeric("3.14")
+as.character(42)
+as.integer(TRUE)
+```
+
+. . .
+
+Impossible conversions give `NA` with a warning:
+
+```{r}
+#| label: as-na
+#| echo: true
+#| eval: true
+#| warning: true
+
+as.numeric("hello")
+```
+
+# Data classes {background-color="#4C326A"}
+
+## Type vs class
+
+`typeof()` tells you how a value is [stored]{.highlight-peach}.
+
+`class()` tells you how a value [behaves]{.highlight-peach}.
+
+```{r}
+#| label: type-vs-class
+#| echo: true
+#| eval: true
+
+d <- as_date("2026-06-04")
+typeof(d)
+class(d)
+```
+
+. . .
+
+A `Date` is stored as a double (days since 1970), but its class makes it print and compute like a calendar date.
+
+## The factor class
+
+A [factor]{.highlight-peach} represents a categorical variable: a value that can only take one of a fixed set of [levels]{.highlight-peach}.
+
+```{r}
+#| label: factor-basic
+#| echo: true
+#| eval: true
+
+sizes <- factor(c("small", "large", "small", "medium"))
+sizes
+levels(sizes)
+```
+
+## How factors are stored
+
+Under the hood, a factor is an [integer vector]{.highlight-peach} plus a table of levels:
+
+```{r}
+#| label: factor-internal
+#| echo: true
+#| eval: true
+
+typeof(sizes)
+class(sizes)
+as.integer(sizes)
+```
+
+## Why bother with factors?
+
+::: {.incremental}
+- Plots and tables follow [your]{.highlight-peach} order, not the alphabet
+- Levels with zero observations still show up in counts
+- Typos become visible: a fifth level you did not expect
+- Models need them to treat a variable as categorical
+:::
+
+# Vectors vs lists {background-color="#4C326A"}
+
+## Atomic vectors
+
+The vectors we have used so far are [atomic]{.highlight-peach}: every element has the same type.
+
+```{r}
+#| label: atomic-vector
+#| echo: true
+#| eval: true
+
+heights <- c(172, 167, 96, 202)
+heights
+```
+
+. . .
+
+That uniformity is what makes vectorized operations possible:
+
+```{r}
+#| label: vectorized
+#| echo: true
+#| eval: true
+
+heights / 100
+```
+
+## Lists
+
+A [list]{.highlight-peach} can hold anything: different types, different lengths, even other lists.
+
+```{r}
+#| label: list-basic
+#| echo: true
+#| eval: true
+
+person <- list(
+  name    = "Luke",
+  height  = 172,
+  films   = c("A New Hope", "Return of the Jedi")
+)
+str(person)
+```
+
+## Vector or list?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Atomic vector**
+
+- One type for all elements
+- Elements are single values
+- Built with `c()`
+- Fast, vectorized math
+:::
+
+::: {.column width="50%"}
+**List**
+
+- Each element can differ
+- Elements can be whole vectors
+- Built with `list()`
+- The flexible container
+:::
+
+::::
+
+. . .
+
+::: {.task}
+`str()` is your friend: it shows the structure of any object at a glance.
+:::
+
+## Why lists matter
+
+You meet lists constantly, sometimes without noticing:
+
+A data frame **is** a list of equal-length vectors
+
+# Building data frames {background-color="#4C326A"}
+
+## From vectors to a data frame
+
+A data frame is a [list of vectors]{.highlight-peach} of equal length, displayed as columns.
+
+. . .
+
+Two ways to build one from vectors:
+
+::: {.incremental}
+- `data.frame()` from base R
+- `tibble()` from the tidyverse
+:::
+
+## With base R: `data.frame()`
+
+```{r}
+#| label: base-dataframe
+#| echo: true
+#| eval: true
+
+df <- data.frame(
+  name   = c("Luke", "Leia", "R2-D2"),
+  height = c(172, 150, 96),
+  droid  = c(FALSE, FALSE, TRUE)
+)
+df
+```
+
+## With the tidyverse: `tibble()`
+
+```{r}
+#| label: tibble-create
+#| echo: true
+#| eval: true
+
+tb <- tibble(
+  name   = c("Luke", "Leia", "R2-D2"),
+  height = c(172, 150, 96),
+  droid  = c(FALSE, FALSE, TRUE)
+)
+tb
+```
+
+. . .
+
+A tibble **is** a data frame, with a few surprising behaviours removed.
+
+## `data.frame()` vs `tibble()` {.smaller}
+
+| Behaviour | `data.frame()` | `tibble()` |
+|-----------|----------------|------------|
+| Printing | everything | first 10 rows, types shown |
+| Recycling | any length that divides evenly | only length 1 |
+| Column names | "fixes" them, `my var` → `my.var` | keeps them as written |
+| Use a column just defined | no | yes |
+
+# Accessing columns {background-color="#4C326A"}
+
+## Four ways to reach a column
+
+```{r}
+#| label: access-setup
+#| echo: true
+#| eval: true
+
+tb <- tibble(
+  name   = c("Luke", "Leia", "R2-D2"),
+  height = c(172, 150, 96)
+)
+```
+
+. . .
+
+| Syntax | Returns |
+|--------|---------|
+| `tb$height` | a vector |
+| `tb[["height"]]` | a vector |
+| `tb["height"]` | a tibble with one column |
+| `pull(tb, height)` | a vector, pipe-friendly |
+
+## `$` and `[[`: get the vector
+
+```{r}
+#| label: dollar-bracket2
+#| echo: true
+#| eval: true
+
+tb$height
+tb[["height"]]
+```
+
+. . .
+
+`[[` also works with a position or a variable holding the name:
+
+```{r}
+#| label: bracket2-position
+#| echo: true
+#| eval: true
+
+tb[[2]]
+col <- "height"
+tb[[col]]
+```
+
+## `[`: keep the data frame
+
+Single brackets [subset]{.highlight-peach} the data frame, so you get a data frame back:
+
+```{r}
+#| label: single-bracket
+#| echo: true
+#| eval: true
+
+tb["height"]
+```
+
+. . .
+
+::: {.task}
+A frequent source of confusion: `tb["height"]` looks like the column but will not work where a plain vector is expected, for example in `mean()`.
+:::
+
+## `pull()`: the pipe-friendly extractor
+
+`pull()` does what `$` does, but fits at the [end of a pipeline]{.highlight-peach}:
+
+```{r}
+#| label: pull-pipeline
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species == "Droid") |>
+  pull(height)
+```
+
+. . .
+
+Compare with `select()`, which keeps the data frame:
+
+```{r}
+#| label: select-compare
+#| echo: true
+#| eval: true
+
+starwars |>
+  filter(species == "Droid") |>
+  select(height)
+```
+
+# For loops {background-color="#4C326A"}
+
+## When you need repetition
+
+Much of R is vectorized, so many loops written in other languages are one line here.
+
+. . .
+
+But sometimes you genuinely need to [repeat a computation]{.highlight-peach}: once per file, once per column, once per simulation.
+
+. . .
+
+That is what a `for` loop does.
+
+## The anatomy of a for loop
+
+```{r}
+#| label: loop-anatomy
+#| echo: true
+#| eval: false
+
+for (item in vector) {
+  # body: runs once per element,
+  # with `item` set to the current element
+}
+```
+
+. . .
+
+::: {.incremental}
+- `item`: a name you choose for the current element
+- `vector`: the values to iterate over
+- body: the code to repeat, inside `{ }`
+:::
+
+## A first loop
+
+```{r}
+#| label: loop-first
+#| echo: true
+#| eval: true
+
+names <- c("Luke", "Leia", "R2-D2")
+
+for (n in names) {
+  print(n)
+}
+```
+
+. . .
+
+::: {.task}
+Inside a loop, results are not printed automatically. Use `print()` to see them.
+:::
+
+## Looping over positions
+
+Often you want the [index]{.highlight-peach}, not the value. Use `seq_along()`:
+
+```{r}
+#| label: loop-seq-along
+#| echo: true
+#| eval: true
+
+heights <- c(172, 150, 96)
+
+for (i in seq_along(heights)) {
+  print(heights[i] / 100)
+}
+```
+
+. . .
+
+::: {.task}
+Prefer `seq_along(x)` over `1:length(x)`. If `x` is empty, `1:0` gives `c(1, 0)` and the loop runs twice instead of not at all.
+:::
+
+## Collecting results
+
+Create an [output container first]{.highlight-peach}, then fill it position by position:
+
+```{r}
+#| label: loop-collect
+#| echo: true
+#| eval: true
+
+heights <- c(172, 150, 96)
+heights_m <- vector()
+
+for (i in seq_along(heights)) {
+  heights_m[i] <- heights[i] / 100
+}
+
+heights_m
+```
+
+## Looping over columns
+
+A data frame is a list, so you can loop over its columns:
+
+```{r}
+#| label: loop-columns
+#| echo: true
+#| eval: true
+
+tb <- tibble(height = c(172, 150, 96), mass = c(77, 49, 32))
+means <- vector("double", ncol(tb))
+
+for (i in seq_along(tb)) {
+  means[i] <- mean(tb[[i]])
+}
+
+means
+```
+
+. . .
+
+Note the `[[`: each column comes out as a plain vector.
+
+## Loop or vectorize?
+
+::: {.incremental}
+- If a vectorized function exists, use it: `heights / 100` beats any loop
+- Loops shine when steps depend on each other, or for side effects like saving one file per group
+:::
+
+## Learn more
+
+::: {.learn-more}
+[https://quarto.org/docs/computations/execution-options.html](https://quarto.org/docs/computations/execution-options.html)
+:::
+
+::: {.learn-more}
+[https://r4ds.hadley.nz/base-R](https://r4ds.hadley.nz/base-R)
+:::
+
+::: {.learn-more}
+[https://r4ds.hadley.nz/factors](https://r4ds.hadley.nz/factors)
+:::
+
+::: {.learn-more}
+[https://r4ds.hadley.nz/iteration](https://r4ds.hadley.nz/iteration)
+:::
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::
