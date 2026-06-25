@@ -1,0 +1,721 @@
+---
+title: "Tidy data, joining and project organization"
+subtitle: "Data Science Flipped Classroom - Module 7"
+author: "Adriana Clavijo Daza"
+date: "2026-06-18"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+footer: "DSFC - Module 7"
+editor: source
+execute:
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+```
+
+# Tidy data {background-color="#4C326A"}
+
+## The same data, many shapes
+
+The same information can be stored in many different table layouts.
+
+. . .
+
+Most of them make analysis harder than it needs to be.
+
+. . .
+
+[Tidy data]{.highlight-peach} is one consistent layout that fits the tidyverse, so `dplyr`, `ggplot2`, and the rest all work without reshaping first.
+
+## Data semantics
+
+Before we can say what makes a dataset tidy, we need a shared vocabulary for what is in it. A [dataset]{.highlight-peach} is a collection of values, each one a number or a string.
+
+. . .
+
+Every value belongs to both a variable and an observation:
+
+::: {.incremental}
+- A [variable]{.highlight-peach} holds all the values that measure the same attribute (height, temperature, duration) across units
+- An [observation]{.highlight-peach} holds all the values measured on the same unit (a person, a day, a country-year) across attributes
+:::
+
+## The three rules
+
+::: {.incremental}
+- Each [variable]{.highlight-peach} forms a column
+- Each [observation]{.highlight-peach} forms a row
+- Each [cell]{.highlight-peach} is a single measurement
+:::
+
+. . .
+
+::: {.task}
+If your table follows these three rules, it is tidy. Almost everything else this module does is about getting there.
+:::
+
+## Tidy in practice
+
+`tidyr` ships with the same dataset in several shapes. This one is tidy:
+
+```{r}
+#| label: table1
+#| echo: true
+#| eval: true
+
+table1
+```
+
+. . .
+
+One row per country-year, one column per variable: `cases` and `population`.
+
+## A messy version
+
+The same numbers, but the values `cases` and `population` are hidden in a `type` column:
+
+```{r}
+#| label: table2
+#| echo: true
+#| eval: true
+
+table2
+```
+
+. . .
+
+Now a single observation (one country-year) is spread over [two rows]{.highlight-peach}.
+
+## Why tidy data pays off
+
+::: {.incremental}
+- One consistent layout to learn, instead of one per dataset
+- Variables live in columns, exactly where `ggplot2` and `dplyr` expect them
+- Vectorized operations work naturally down each column
+- Less time reshaping, more time analysing
+:::
+
+# Reshaping with tidyr {background-color="#4C326A"}
+
+## What tidyr does
+
+`tidyr` is the tidyverse package for [reshaping]{.highlight-peach} tables into tidy form. It is loaded with the tidyverse.
+
+. . .
+
+Its main jobs:
+
+::: {.incremental}
+- **Pivoting**: switching between long and wide layouts
+- **Splitting and combining** columns
+- **Nesting and unnesting** columns
+- **Treating missing values**
+:::
+
+## Pivoting: what is it?
+
+[Pivoting]{.highlight-peach} reshapes a table by moving information between rows and columns, without changing the data itself.
+
+. . .
+
+Two directions:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Longer**
+
+Many columns into fewer columns and more rows.
+:::
+
+::: {.column width="50%"}
+**Wider**
+
+Fewer columns into many columns and fewer rows.
+:::
+
+::::
+
+. . .
+
+::: {.task}
+They are inverses of each other: `pivot_longer()` undoes `pivot_wider()` and vice versa.
+:::
+
+# pivot_longer() {background-color="#4C326A"}
+
+## When to go longer
+
+A common problem: column [names are values]{.highlight-peach}, not variables.
+
+```{r}
+#| label: table4a
+#| echo: true
+#| eval: true
+
+table4a
+```
+
+. . .
+
+`1999` and `2000` are years, not variable names. The numbers are all `cases`.
+
+## `pivot_longer()`
+
+```{r}
+#| label: longer-basic
+#| echo: true
+#| eval: true
+
+table4a |>
+  pivot_longer(
+    cols = c(`1999`, `2000`),
+    names_to = "year",
+    values_to = "cases"
+  )
+```
+
+## Reading the arguments
+
+::: {.incremental}
+- `cols`: which columns to pivot (the year columns here)
+- `names_to`: name of the new column holding the [old column names]{.highlight-peach}
+- `values_to`: name of the new column holding the [old cell values]{.highlight-peach}
+:::
+
+. . .
+
+::: {.task}
+The columns not listed in `cols` are kept as identifiers, repeated down the new rows.
+:::
+
+# pivot_wider() {background-color="#4C326A"}
+
+## When to go wider
+
+The opposite problem: one observation is spread over [several rows]{.highlight-peach}. Recall `table2`:
+
+```{r}
+#| label: table2-again
+#| echo: true
+#| eval: true
+
+head(table2, 4)
+```
+
+. . .
+
+`cases` and `population` should be two columns, not two rows.
+
+## `pivot_wider()`
+
+```{r}
+#| label: wider-basic
+#| echo: true
+#| eval: true
+
+table2 |>
+  pivot_wider(
+    names_from = type,
+    values_from = count
+  )
+```
+
+## Reading the arguments
+
+::: {.incremental}
+- `names_from`: the column whose values become [new column names]{.highlight-peach}
+- `values_from`: the column whose values [fill the new columns]{.highlight-peach}
+:::
+
+. . .
+
+::: {.task}
+`pivot_wider()` often makes data less tidy. It is most useful for building summary tables for humans to read, not for further analysis.
+:::
+
+# More tidyr tools {background-color="#4C326A"}
+
+## Splitting one column into many
+
+In `table3`, `cases` and `population` are crammed into a single `rate` column:
+
+```{r}
+#| label: table3
+#| echo: true
+#| eval: true
+
+table3
+```
+
+## Splitting one column into many
+
+`separate_wider_delim()` splits a column on a [separator]{.highlight-peach}:
+
+```{r}
+#| label: separate
+#| echo: true
+#| eval: true
+
+table3 |>
+  separate_wider_delim(
+    rate,
+    delim = "/",
+    names = c("cases", "population")
+  )
+```
+
+## Combining several columns into one
+
+`unite()` is the reverse, gluing columns together:
+
+```{r}
+#| label: unite
+#| echo: true
+#| eval: true
+
+table5 <- table1 |>
+  unite("country_year", country, year, sep = "_")
+
+head(table5, 3)
+```
+
+## Nesting columns
+
+`nest()` collapses a group of rows into a [single cell]{.highlight-peach} holding a small tibble:
+
+```{r}
+#| label: nest
+#| echo: true
+#| eval: true
+
+nested <- table1 |>
+  nest(data = c(year, cases, population))
+
+nested
+```
+
+. . .
+
+One row per country, with all its measurements tucked away in `data`.
+
+. . .
+
+::: {.task}
+Nesting shines when you want to fit one model or make one plot per group, using a column of tibbles.
+:::
+
+## Unnesting columns
+
+`unnest()` expands those cells back into ordinary rows:
+
+```{r}
+#| label: unnest
+#| echo: true
+#| eval: true
+
+nested |>
+  unnest(data)
+```
+
+## Treating missing values
+
+`tidyr` has dedicated tools for `NA`:
+
+| Function | What it does |
+|----------|--------------|
+| `drop_na()` | remove rows containing `NA` |
+| `replace_na()` | swap `NA` for a chosen value |
+| `fill()` | carry the last value down (or up) |
+| `complete()` | add rows for missing combinations |
+
+## Missing values in action
+
+```{r}
+#| label: na-tools
+#| echo: true
+#| eval: true
+
+sales <- tibble(
+  quarter = c("Q1", NA, NA, "Q2"),
+  revenue = c(100, 150, NA, 200)
+)
+
+sales |>
+  fill(quarter) |>
+  replace_na(list(revenue = 0))
+```
+
+# Joining data {background-color="#4C326A"}
+
+## Why join?
+
+Real projects rarely keep everything in one table.
+
+. . .
+
+::: {.incremental}
+- Measurements in one file, site descriptions in another
+- Short codes in your data, with their full meanings stored in a separate lookup table
+- Results you produced, joined back to the original records
+:::
+
+. . .
+
+[Joins]{.highlight-peach} combine two tables by matching rows on a shared [key]{.highlight-peach}.
+
+## Two small tables
+
+`dplyr` ships two tiny tables that share a `name` column:
+
+```{r}
+#| label: bands
+#| echo: true
+#| eval: true
+
+band_members
+band_instruments
+```
+
+## The mutating joins
+
+All take the form `*_join(x, y)` and add the columns of `y` to `x`. They differ in [which rows they keep]{.highlight-peach}:
+
+| Function | Keeps |
+|----------|-------|
+| `inner_join()` | rows matched in **both** tables |
+| `left_join()` | all rows of `x` |
+| `right_join()` | all rows of `y` |
+| `full_join()` | all rows of **either** table |
+
+## Picturing the joins
+
+![](https://r4ds.hadley.nz/diagrams/join/venn.png){fig-alt="Venn diagrams showing the difference between inner, left, right and full joins" width="70%"}
+
+::: {.smallest}
+Diagram from Wickham, Çetinkaya-Rundel & Grolemund, [R for Data Science (2e)](https://r4ds.hadley.nz/joins.html#fig-join-venn), licensed CC BY-NC-ND 3.0.
+:::
+
+## `left_join()`: keep everything in `x`
+
+```{r}
+#| label: left-join
+#| echo: true
+#| eval: true
+
+band_members |>
+  left_join(band_instruments, by = "name")
+```
+
+. . .
+
+Mick has no instrument, so the new column is `NA`. No member is dropped.
+
+## `inner_join()`: keep only matches
+
+```{r}
+#| label: inner-join
+#| echo: true
+#| eval: true
+
+band_members |>
+  inner_join(band_instruments, by = "name")
+```
+
+. . .
+
+Only John and Paul appear in both tables, so only they survive.
+
+## `full_join()`: keep everyone
+
+```{r}
+#| label: full-join
+#| echo: true
+#| eval: true
+
+band_members |>
+  full_join(band_instruments, by = "name")
+```
+
+. . .
+
+Everyone is kept; gaps on either side become `NA`.
+
+## The key with `by`
+
+`by` names the column(s) used to match rows:
+
+::: {.incremental}
+- `by = "name"`: match on a shared column name
+- `by = join_by(id == person_id)`: match columns with [different names]{.highlight-peach}
+- omit it and `dplyr` matches on all shared names, printing a message
+:::
+
+. . .
+
+::: {.task}
+Always be explicit about the key. A silent match on the wrong columns is a hard bug to spot.
+:::
+
+## Filtering joins
+
+Two joins use `y` only to [filter]{.highlight-peach} `x`, never adding columns:
+
+```{r}
+#| label: semi-anti
+#| echo: true
+#| eval: true
+
+band_members |>
+  anti_join(band_instruments, by = "name")
+```
+
+::: {.incremental}
+- `semi_join()`: keep rows of `x` that **have** a match
+- `anti_join()`: keep rows of `x` that have **no** match
+:::
+
+# Metadata {background-color="#4C326A"}
+
+## What is metadata?
+
+[Metadata]{.highlight-peach} is data about your data: the documentation that lets someone else (or future you) understand and reuse a project.
+
+. . .
+
+::: {.task}
+A dataset without metadata is a pile of numbers. With metadata, it is evidence.
+:::
+
+## Documenting a project
+
+Project-level documentation usually lives in a [README]{.highlight-peach} file and covers:
+
+::: {.incremental}
+- **General information**: title, author, purpose, date
+- **Access information**: licence, how to cite, where it lives
+- **Methodological information**: how the data were collected and processed
+:::
+
+## Documenting the data itself
+
+For the data, you write a [data dictionary]{.highlight-peach} (also called a codebook).
+
+. . .
+
+It describes each variable. At a minimum:
+
+::: {.incremental}
+- the **variable name** as it appears in the file
+- a plain-language **description**
+:::
+
+. . .
+
+Often also: units, type, allowed values, and codes for missing data.
+
+## A data dictionary as a table
+
+| variable | description | units |
+|----------|-------------|-------|
+| `country` | country name | |
+| `year` | year of measurement | |
+| `cases` | confirmed TB cases | count |
+| `population` | population that year | people |
+
+. . .
+
+::: {.task}
+For the capstone project, save it as `dictionary.csv` in your processed data folder.
+:::
+
+# Organizing a project {background-color="#4C326A"}
+
+## A place for everything
+
+A predictable folder structure means anyone can find their way around:
+
+``` {.plain}
+.
+├── R
+│   └── 01-data-preparation.R
+├── data
+│   ├── processed
+│   │   ├── README.md
+│   │   ├── dictionary.csv
+│   │   └── analysis.csv
+│   └── raw
+│       └── survey_05112025.xlsx
+├── docs
+│   ├── index.qmd
+│   └── index.html
+└── project.Rproj
+```
+
+## Reading the tree
+
+::: {.incremental}
+- `R/`: scripts that **do** things, mainly data preparation
+- `data/raw/`: the original files, [never edited by hand]{.highlight-peach}
+- `data/processed/`: clean data plus its README and dictionary
+- `docs/`: the rendered report and its source
+- `project.Rproj`: opens the project in RStudio
+:::
+
+## One golden rule
+
+[Raw data is read-only.]{.highlight-peach}
+
+. . .
+
+You never overwrite the files in `data/raw/`. Every cleaning step reads from `raw/`, transforms in R, and writes to `processed/`.
+
+. . .
+
+::: {.task}
+This way, the path from messy original to clean dataset is always reproducible: delete `processed/`, re-run the script, get it back.
+:::
+
+# R scripts {background-color="#4C326A"}
+
+## Beyond Quarto
+
+So far you have written everything in [Quarto]{.highlight-peach} (`.qmd`) files: prose, code, and output woven together.
+
+. . .
+
+An [R script]{.highlight-peach} (`.R`) is different: it is [pure R code]{.highlight-peach}, no YAML, no markdown, no chunks.
+
+. . .
+
+Comments start with `#`; everything else is code that runs top to bottom.
+
+## What a script looks like
+
+``` {.r}
+# 01-data-preparation.R
+# Clean the raw survey data
+
+library(tidyverse)
+
+raw <- read_csv("data/raw/survey.csv")
+
+clean <- raw |>
+  filter(!is.na(value)) |>
+  mutate(date = ymd(date))
+
+write_csv(clean, "data/processed/analysis.csv")
+```
+
+## Script or Quarto?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**R script**
+
+- A job to run start to finish
+- Data cleaning, downloads
+- No narrative needed
+- Produces files, not a report
+:::
+
+::: {.column width="50%"}
+**Quarto**
+
+- A document to read
+- Analysis with explanation
+- Prose, figures, tables
+- Renders to HTML or PDF
+:::
+
+::::
+
+. . .
+
+::: {.task}
+A common pattern: scripts prepare the data, Quarto reports on it.
+:::
+
+## Running a script
+
+::: {.incremental}
+- In RStudio: the **Source** button, or `Ctrl/Cmd + Shift + S`
+- Line by line: `Ctrl/Cmd + Enter`, just like in a chunk
+- From another file: `source("R/01-data-preparation.R")`
+:::
+
+. . .
+
+`source()` runs the whole script, as if you had typed every line.
+
+## Integrating scripts with Quarto
+
+Keep the heavy lifting in a script, then [call it]{.highlight-peach} from your report:
+
+````
+```{{r}}
+#| label: prepare
+#| include: false
+
+source("R/01-data-preparation.R")
+```
+````
+
+. . .
+
+The script writes `analysis.csv`; the report reads it:
+
+````
+```{{r}}
+analysis <- read_csv("data/processed/analysis.csv")
+```
+````
+
+## Why split the work?
+
+::: {.incremental}
+- The report stays focused on [results]{.highlight-peach}, not cleaning code
+- Slow preparation runs once, not on every render
+- The same clean data can feed several reports
+- Each file has one clear job
+:::
+
+. . .
+
+::: {.task}
+This is exactly the structure of the capstone project: a preparation script in `R/`, a report in `docs/`.
+:::
+
+## Learn more
+
+::: {.learn-more}
+[https://r4ds.hadley.nz/data-tidy](https://r4ds.hadley.nz/data-tidy)
+:::
+
+::: {.learn-more}
+[https://r4ds.hadley.nz/joins](https://r4ds.hadley.nz/joins)
+:::
+
+::: {.learn-more}
+[https://tidyr.tidyverse.org](https://tidyr.tidyverse.org)
+:::
+
+::: {.learn-more}
+[https://r4ds.hadley.nz/workflow-scripts](https://r4ds.hadley.nz/workflow-scripts)
+:::
+
+## {background-color="#4C326A"}
+
+::: {.hand-purple-large}
+Questions?
+:::

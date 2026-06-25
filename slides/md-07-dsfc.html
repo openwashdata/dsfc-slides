@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="md-07-dsfc_files/libs/clipboard/clipboard.min.js"></script>
+<script src="md-07-dsfc_files/libs/quarto-html/tabby.min.js"></script>
+<script src="md-07-dsfc_files/libs/quarto-html/popper.min.js"></script>
+<script src="md-07-dsfc_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="md-07-dsfc_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="md-07-dsfc_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="md-07-dsfc_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.31">
+
+  <meta name="author" content="Adriana Clavijo Daza">
+  <meta name="dcterms.date" content="2026-06-18">
+  <title>Tidy data, joining and project organization</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="md-07-dsfc_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="md-07-dsfc_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="md-07-dsfc_files/libs/revealjs/dist/theme/quarto-3460a193ad1a6bd02149326f73fe8af0.css">
+  <link href="md-07-dsfc_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="md-07-dsfc_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="md-07-dsfc_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="md-07-dsfc_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="md-07-dsfc_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="md-07-dsfc_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Tidy data, joining and project organization</h1>
+  <p class="subtitle">Data Science Flipped Classroom - Module 7</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Adriana Clavijo Daza 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-06-18</p>
+</section>
+<section>
+<section id="tidy-data" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Tidy data</h1>
+
+</section>
+<section id="the-same-data-many-shapes" class="slide level2">
+<h2>The same data, many shapes</h2>
+<p>The same information can be stored in many different table layouts.</p>
+<div class="fragment">
+<p>Most of them make analysis harder than it needs to be.</p>
+</div>
+<div class="fragment">
+<p><span class="highlight-peach">Tidy data</span> is one consistent layout that fits the tidyverse, so <code>dplyr</code>, <code>ggplot2</code>, and the rest all work without reshaping first.</p>
+</div>
+</section>
+<section id="data-semantics" class="slide level2">
+<h2>Data semantics</h2>
+<p>Before we can say what makes a dataset tidy, we need a shared vocabulary for what is in it. A <span class="highlight-peach">dataset</span> is a collection of values, each one a number or a string.</p>
+<div class="fragment">
+<p>Every value belongs to both a variable and an observation:</p>
+<ul>
+<li class="fragment">A <span class="highlight-peach">variable</span> holds all the values that measure the same attribute (height, temperature, duration) across units</li>
+<li class="fragment">An <span class="highlight-peach">observation</span> holds all the values measured on the same unit (a person, a day, a country-year) across attributes</li>
+</ul>
+</div>
+</section>
+<section id="the-three-rules" class="slide level2">
+<h2>The three rules</h2>
+<ul>
+<li class="fragment">Each <span class="highlight-peach">variable</span> forms a column</li>
+<li class="fragment">Each <span class="highlight-peach">observation</span> forms a row</li>
+<li class="fragment">Each <span class="highlight-peach">cell</span> is a single measurement</li>
+</ul>
+<div class="fragment">
+<div class="task">
+<p>If your table follows these three rules, it is tidy. Almost everything else this module does is about getting there.</p>
+</div>
+</div>
+</section>
+<section id="tidy-in-practice" class="slide level2">
+<h2>Tidy in practice</h2>
+<p><code>tidyr</code> ships with the same dataset in several shapes. This one is tidy:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>table1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  country      year  cases population
+  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+1 Afghanistan  1999    745   19987071
+2 Afghanistan  2000   2666   20595360
+3 Brazil       1999  37737  172006362
+4 Brazil       2000  80488  174504898
+5 China        1999 212258 1272915272
+6 China        2000 213766 1280428583</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>One row per country-year, one column per variable: <code>cases</code> and <code>population</code>.</p>
+</div>
+</section>
+<section id="a-messy-version" class="slide level2">
+<h2>A messy version</h2>
+<p>The same numbers, but the values <code>cases</code> and <code>population</code> are hidden in a <code>type</code> column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 4
+   country      year type            count
+   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;
+ 1 Afghanistan  1999 cases             745
+ 2 Afghanistan  1999 population   19987071
+ 3 Afghanistan  2000 cases            2666
+ 4 Afghanistan  2000 population   20595360
+ 5 Brazil       1999 cases           37737
+ 6 Brazil       1999 population  172006362
+ 7 Brazil       2000 cases           80488
+ 8 Brazil       2000 population  174504898
+ 9 China        1999 cases          212258
+10 China        1999 population 1272915272
+11 China        2000 cases          213766
+12 China        2000 population 1280428583</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Now a single observation (one country-year) is spread over <span class="highlight-peach">two rows</span>.</p>
+</div>
+</section>
+<section id="why-tidy-data-pays-off" class="slide level2">
+<h2>Why tidy data pays off</h2>
+<ul>
+<li class="fragment">One consistent layout to learn, instead of one per dataset</li>
+<li class="fragment">Variables live in columns, exactly where <code>ggplot2</code> and <code>dplyr</code> expect them</li>
+<li class="fragment">Vectorized operations work naturally down each column</li>
+<li class="fragment">Less time reshaping, more time analysing</li>
+</ul>
+</section></section>
+<section>
+<section id="reshaping-with-tidyr" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Reshaping with tidyr</h1>
+
+</section>
+<section id="what-tidyr-does" class="slide level2">
+<h2>What tidyr does</h2>
+<p><code>tidyr</code> is the tidyverse package for <span class="highlight-peach">reshaping</span> tables into tidy form. It is loaded with the tidyverse.</p>
+<div class="fragment">
+<p>Its main jobs:</p>
+<ul>
+<li class="fragment"><strong>Pivoting</strong>: switching between long and wide layouts</li>
+<li class="fragment"><strong>Splitting and combining</strong> columns</li>
+<li class="fragment"><strong>Nesting and unnesting</strong> columns</li>
+<li class="fragment"><strong>Treating missing values</strong></li>
+</ul>
+</div>
+</section>
+<section id="pivoting-what-is-it" class="slide level2">
+<h2>Pivoting: what is it?</h2>
+<p><span class="highlight-peach">Pivoting</span> reshapes a table by moving information between rows and columns, without changing the data itself.</p>
+<div class="fragment">
+<p>Two directions:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Longer</strong></p>
+<p>Many columns into fewer columns and more rows.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Wider</strong></p>
+<p>Fewer columns into many columns and fewer rows.</p>
+</div></div>
+</div>
+<div class="fragment">
+<div class="task">
+<p>They are inverses of each other: <code>pivot_longer()</code> undoes <code>pivot_wider()</code> and vice versa.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="pivot_longer" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>pivot_longer()</h1>
+
+</section>
+<section id="when-to-go-longer" class="slide level2">
+<h2>When to go longer</h2>
+<p>A common problem: column <span class="highlight-peach">names are values</span>, not variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>table4a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  country     `1999` `2000`
+  &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;
+1 Afghanistan    745   2666
+2 Brazil       37737  80488
+3 China       212258 213766</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><code>1999</code> and <code>2000</code> are years, not variable names. The numbers are all <code>cases</code>.</p>
+</div>
+</section>
+<section id="pivot_longer-1" class="slide level2">
+<h2><code>pivot_longer()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>table4a <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb7-3"><a href=""></a>    <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">1999</span><span class="st">`</span>, <span class="st">`</span><span class="at">2000</span><span class="st">`</span>),</span>
+<span id="cb7-4"><a href=""></a>    <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
+<span id="cb7-5"><a href=""></a>    <span class="at">values_to =</span> <span class="st">"cases"</span></span>
+<span id="cb7-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  country     year   cases
+  &lt;chr&gt;       &lt;chr&gt;  &lt;dbl&gt;
+1 Afghanistan 1999     745
+2 Afghanistan 2000    2666
+3 Brazil      1999   37737
+4 Brazil      2000   80488
+5 China       1999  212258
+6 China       2000  213766</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-the-arguments" class="slide level2">
+<h2>Reading the arguments</h2>
+<ul>
+<li class="fragment"><code>cols</code>: which columns to pivot (the year columns here)</li>
+<li class="fragment"><code>names_to</code>: name of the new column holding the <span class="highlight-peach">old column names</span></li>
+<li class="fragment"><code>values_to</code>: name of the new column holding the <span class="highlight-peach">old cell values</span></li>
+</ul>
+<div class="fragment">
+<div class="task">
+<p>The columns not listed in <code>cols</code> are kept as identifiers, repeated down the new rows.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="pivot_wider" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>pivot_wider()</h1>
+
+</section>
+<section id="when-to-go-wider" class="slide level2">
+<h2>When to go wider</h2>
+<p>The opposite problem: one observation is spread over <span class="highlight-peach">several rows</span>. Recall <code>table2</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">head</span>(table2, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 4
+  country      year type          count
+  &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
+1 Afghanistan  1999 cases           745
+2 Afghanistan  1999 population 19987071
+3 Afghanistan  2000 cases          2666
+4 Afghanistan  2000 population 20595360</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><code>cases</code> and <code>population</code> should be two columns, not two rows.</p>
+</div>
+</section>
+<section id="pivot_wider-1" class="slide level2">
+<h2><code>pivot_wider()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>table2 <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb11-3"><a href=""></a>    <span class="at">names_from =</span> type,</span>
+<span id="cb11-4"><a href=""></a>    <span class="at">values_from =</span> count</span>
+<span id="cb11-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  country      year  cases population
+  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+1 Afghanistan  1999    745   19987071
+2 Afghanistan  2000   2666   20595360
+3 Brazil       1999  37737  172006362
+4 Brazil       2000  80488  174504898
+5 China        1999 212258 1272915272
+6 China        2000 213766 1280428583</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-the-arguments-1" class="slide level2">
+<h2>Reading the arguments</h2>
+<ul>
+<li class="fragment"><code>names_from</code>: the column whose values become <span class="highlight-peach">new column names</span></li>
+<li class="fragment"><code>values_from</code>: the column whose values <span class="highlight-peach">fill the new columns</span></li>
+</ul>
+<div class="fragment">
+<div class="task">
+<p><code>pivot_wider()</code> often makes data less tidy. It is most useful for building summary tables for humans to read, not for further analysis.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="more-tidyr-tools" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>More tidyr tools</h1>
+
+</section>
+<section id="splitting-one-column-into-many" class="slide level2">
+<h2>Splitting one column into many</h2>
+<p>In <code>table3</code>, <code>cases</code> and <code>population</code> are crammed into a single <code>rate</code> column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>table3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  country      year rate             
+  &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;            
+1 Afghanistan  1999 745/19987071     
+2 Afghanistan  2000 2666/20595360    
+3 Brazil       1999 37737/172006362  
+4 Brazil       2000 80488/174504898  
+5 China        1999 212258/1272915272
+6 China        2000 213766/1280428583</code></pre>
+</div>
+</div>
+</section>
+<section id="splitting-one-column-into-many-1" class="slide level2">
+<h2>Splitting one column into many</h2>
+<p><code>separate_wider_delim()</code> splits a column on a <span class="highlight-peach">separator</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>table3 <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">separate_wider_delim</span>(</span>
+<span id="cb15-3"><a href=""></a>    rate,</span>
+<span id="cb15-4"><a href=""></a>    <span class="at">delim =</span> <span class="st">"/"</span>,</span>
+<span id="cb15-5"><a href=""></a>    <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"cases"</span>, <span class="st">"population"</span>)</span>
+<span id="cb15-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  country      year cases  population
+  &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     
+1 Afghanistan  1999 745    19987071  
+2 Afghanistan  2000 2666   20595360  
+3 Brazil       1999 37737  172006362 
+4 Brazil       2000 80488  174504898 
+5 China        1999 212258 1272915272
+6 China        2000 213766 1280428583</code></pre>
+</div>
+</div>
+</section>
+<section id="combining-several-columns-into-one" class="slide level2">
+<h2>Combining several columns into one</h2>
+<p><code>unite()</code> is the reverse, gluing columns together:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>table5 <span class="ot">&lt;-</span> table1 <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">unite</span>(<span class="st">"country_year"</span>, country, year, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb17-3"><a href=""></a></span>
+<span id="cb17-4"><a href=""></a><span class="fu">head</span>(table5, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  country_year     cases population
+  &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1 Afghanistan_1999   745   19987071
+2 Afghanistan_2000  2666   20595360
+3 Brazil_1999      37737  172006362</code></pre>
+</div>
+</div>
+</section>
+<section id="nesting-columns" class="slide level2">
+<h2>Nesting columns</h2>
+<p><code>nest()</code> collapses a group of rows into a <span class="highlight-peach">single cell</span> holding a small tibble:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>nested <span class="ot">&lt;-</span> table1 <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="fu">c</span>(year, cases, population))</span>
+<span id="cb19-3"><a href=""></a></span>
+<span id="cb19-4"><a href=""></a>nested</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  country     data            
+  &lt;chr&gt;       &lt;list&gt;          
+1 Afghanistan &lt;tibble [2 × 3]&gt;
+2 Brazil      &lt;tibble [2 × 3]&gt;
+3 China       &lt;tibble [2 × 3]&gt;</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>One row per country, with all its measurements tucked away in <code>data</code>.</p>
+</div>
+<div class="fragment">
+<div class="task">
+<p>Nesting shines when you want to fit one model or make one plot per group, using a column of tibbles.</p>
+</div>
+</div>
+</section>
+<section id="unnesting-columns" class="slide level2">
+<h2>Unnesting columns</h2>
+<p><code>unnest()</code> expands those cells back into ordinary rows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>nested <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href=""></a>  <span class="fu">unnest</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  country      year  cases population
+  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+1 Afghanistan  1999    745   19987071
+2 Afghanistan  2000   2666   20595360
+3 Brazil       1999  37737  172006362
+4 Brazil       2000  80488  174504898
+5 China        1999 212258 1272915272
+6 China        2000 213766 1280428583</code></pre>
+</div>
+</div>
+</section>
+<section id="treating-missing-values" class="slide level2">
+<h2>Treating missing values</h2>
+<p><code>tidyr</code> has dedicated tools for <code>NA</code>:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>drop_na()</code></td>
+<td>remove rows containing <code>NA</code></td>
+</tr>
+<tr class="even">
+<td><code>replace_na()</code></td>
+<td>swap <code>NA</code> for a chosen value</td>
+</tr>
+<tr class="odd">
+<td><code>fill()</code></td>
+<td>carry the last value down (or up)</td>
+</tr>
+<tr class="even">
+<td><code>complete()</code></td>
+<td>add rows for missing combinations</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="missing-values-in-action" class="slide level2">
+<h2>Missing values in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>sales <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb23-2"><a href=""></a>  <span class="at">quarter =</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"Q2"</span>),</span>
+<span id="cb23-3"><a href=""></a>  <span class="at">revenue =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">150</span>, <span class="cn">NA</span>, <span class="dv">200</span>)</span>
+<span id="cb23-4"><a href=""></a>)</span>
+<span id="cb23-5"><a href=""></a></span>
+<span id="cb23-6"><a href=""></a>sales <span class="sc">|&gt;</span></span>
+<span id="cb23-7"><a href=""></a>  <span class="fu">fill</span>(quarter) <span class="sc">|&gt;</span></span>
+<span id="cb23-8"><a href=""></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">revenue =</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  quarter revenue
+  &lt;chr&gt;     &lt;dbl&gt;
+1 Q1          100
+2 Q1          150
+3 Q1            0
+4 Q2          200</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="joining-data" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Joining data</h1>
+
+</section>
+<section id="why-join" class="slide level2">
+<h2>Why join?</h2>
+<p>Real projects rarely keep everything in one table.</p>
+<div class="fragment">
+<ul>
+<li class="fragment">Measurements in one file, site descriptions in another</li>
+<li class="fragment">Short codes in your data, with their full meanings stored in a separate lookup table</li>
+<li class="fragment">Results you produced, joined back to the original records</li>
+</ul>
+</div>
+<div class="fragment">
+<p><span class="highlight-peach">Joins</span> combine two tables by matching rows on a shared <span class="highlight-peach">key</span>.</p>
+</div>
+</section>
+<section id="two-small-tables" class="slide level2">
+<h2>Two small tables</h2>
+<p><code>dplyr</code> ships two tiny tables that share a <code>name</code> column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>band_members</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  name  band   
+  &lt;chr&gt; &lt;chr&gt;  
+1 Mick  Stones 
+2 John  Beatles
+3 Paul  Beatles</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>band_instruments</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  name  plays 
+  &lt;chr&gt; &lt;chr&gt; 
+1 John  guitar
+2 Paul  bass  
+3 Keith guitar</code></pre>
+</div>
+</div>
+</section>
+<section id="the-mutating-joins" class="slide level2">
+<h2>The mutating joins</h2>
+<p>All take the form <code>*_join(x, y)</code> and add the columns of <code>y</code> to <code>x</code>. They differ in <span class="highlight-peach">which rows they keep</span>:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Keeps</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>inner_join()</code></td>
+<td>rows matched in <strong>both</strong> tables</td>
+</tr>
+<tr class="even">
+<td><code>left_join()</code></td>
+<td>all rows of <code>x</code></td>
+</tr>
+<tr class="odd">
+<td><code>right_join()</code></td>
+<td>all rows of <code>y</code></td>
+</tr>
+<tr class="even">
+<td><code>full_join()</code></td>
+<td>all rows of <strong>either</strong> table</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="picturing-the-joins" class="slide level2">
+<h2>Picturing the joins</h2>
+
+<img data-src="https://r4ds.hadley.nz/diagrams/join/venn.png" style="width:70.0%" alt="Venn diagrams showing the difference between inner, left, right and full joins" class="r-stretch"><div class="smallest">
+<p>Diagram from Wickham, Çetinkaya-Rundel &amp; Grolemund, <a href="https://r4ds.hadley.nz/joins.html#fig-join-venn">R for Data Science (2e)</a>, licensed CC BY-NC-ND 3.0.</p>
+</div>
+</section>
+<section id="left_join-keep-everything-in-x" class="slide level2">
+<h2><code>left_join()</code>: keep everything in <code>x</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>band_members <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">left_join</span>(band_instruments, <span class="at">by =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  </code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Mick has no instrument, so the new column is <code>NA</code>. No member is dropped.</p>
+</div>
+</section>
+<section id="inner_join-keep-only-matches" class="slide level2">
+<h2><code>inner_join()</code>: keep only matches</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>band_members <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href=""></a>  <span class="fu">inner_join</span>(band_instruments, <span class="at">by =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  </code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Only John and Paul appear in both tables, so only they survive.</p>
+</div>
+</section>
+<section id="full_join-keep-everyone" class="slide level2">
+<h2><code>full_join()</code>: keep everyone</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>band_members <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href=""></a>  <span class="fu">full_join</span>(band_instruments, <span class="at">by =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  
+4 Keith &lt;NA&gt;    guitar</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Everyone is kept; gaps on either side become <code>NA</code>.</p>
+</div>
+</section>
+<section id="the-key-with-by" class="slide level2">
+<h2>The key with <code>by</code></h2>
+<p><code>by</code> names the column(s) used to match rows:</p>
+<ul>
+<li class="fragment"><code>by = "name"</code>: match on a shared column name</li>
+<li class="fragment"><code>by = join_by(id == person_id)</code>: match columns with <span class="highlight-peach">different names</span></li>
+<li class="fragment">omit it and <code>dplyr</code> matches on all shared names, printing a message</li>
+</ul>
+<div class="fragment">
+<div class="task">
+<p>Always be explicit about the key. A silent match on the wrong columns is a hard bug to spot.</p>
+</div>
+</div>
+</section>
+<section id="filtering-joins" class="slide level2">
+<h2>Filtering joins</h2>
+<p>Two joins use <code>y</code> only to <span class="highlight-peach">filter</span> <code>x</code>, never adding columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>band_members <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href=""></a>  <span class="fu">anti_join</span>(band_instruments, <span class="at">by =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  name  band  
+  &lt;chr&gt; &lt;chr&gt; 
+1 Mick  Stones</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment"><code>semi_join()</code>: keep rows of <code>x</code> that <strong>have</strong> a match</li>
+<li class="fragment"><code>anti_join()</code>: keep rows of <code>x</code> that have <strong>no</strong> match</li>
+</ul>
+</section></section>
+<section>
+<section id="metadata" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Metadata</h1>
+
+</section>
+<section id="what-is-metadata" class="slide level2">
+<h2>What is metadata?</h2>
+<p><span class="highlight-peach">Metadata</span> is data about your data: the documentation that lets someone else (or future you) understand and reuse a project.</p>
+<div class="fragment">
+<div class="task">
+<p>A dataset without metadata is a pile of numbers. With metadata, it is evidence.</p>
+</div>
+</div>
+</section>
+<section id="documenting-a-project" class="slide level2">
+<h2>Documenting a project</h2>
+<p>Project-level documentation usually lives in a <span class="highlight-peach">README</span> file and covers:</p>
+<ul>
+<li class="fragment"><strong>General information</strong>: title, author, purpose, date</li>
+<li class="fragment"><strong>Access information</strong>: licence, how to cite, where it lives</li>
+<li class="fragment"><strong>Methodological information</strong>: how the data were collected and processed</li>
+</ul>
+</section>
+<section id="documenting-the-data-itself" class="slide level2">
+<h2>Documenting the data itself</h2>
+<p>For the data, you write a <span class="highlight-peach">data dictionary</span> (also called a codebook).</p>
+<div class="fragment">
+<p>It describes each variable. At a minimum:</p>
+<ul>
+<li class="fragment">the <strong>variable name</strong> as it appears in the file</li>
+<li class="fragment">a plain-language <strong>description</strong></li>
+</ul>
+</div>
+<div class="fragment">
+<p>Often also: units, type, allowed values, and codes for missing data.</p>
+</div>
+</section>
+<section id="a-data-dictionary-as-a-table" class="slide level2">
+<h2>A data dictionary as a table</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>variable</th>
+<th>description</th>
+<th>units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>country</code></td>
+<td>country name</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>year</code></td>
+<td>year of measurement</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>cases</code></td>
+<td>confirmed TB cases</td>
+<td>count</td>
+</tr>
+<tr class="even">
+<td><code>population</code></td>
+<td>population that year</td>
+<td>people</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="task">
+<p>For the capstone project, save it as <code>dictionary.csv</code> in your processed data folder.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="organizing-a-project" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>Organizing a project</h1>
+
+</section>
+<section id="a-place-for-everything" class="slide level2">
+<h2>A place for everything</h2>
+<p>A predictable folder structure means anyone can find their way around:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource plain number-lines code-with-copy"><code class="sourceCode"><span id="cb37-1"><a href=""></a>.</span>
+<span id="cb37-2"><a href=""></a>├── R</span>
+<span id="cb37-3"><a href=""></a>│   └── 01-data-preparation.R</span>
+<span id="cb37-4"><a href=""></a>├── data</span>
+<span id="cb37-5"><a href=""></a>│   ├── processed</span>
+<span id="cb37-6"><a href=""></a>│   │   ├── README.md</span>
+<span id="cb37-7"><a href=""></a>│   │   ├── dictionary.csv</span>
+<span id="cb37-8"><a href=""></a>│   │   └── analysis.csv</span>
+<span id="cb37-9"><a href=""></a>│   └── raw</span>
+<span id="cb37-10"><a href=""></a>│       └── survey_05112025.xlsx</span>
+<span id="cb37-11"><a href=""></a>├── docs</span>
+<span id="cb37-12"><a href=""></a>│   ├── index.qmd</span>
+<span id="cb37-13"><a href=""></a>│   └── index.html</span>
+<span id="cb37-14"><a href=""></a>└── project.Rproj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="reading-the-tree" class="slide level2">
+<h2>Reading the tree</h2>
+<ul>
+<li class="fragment"><code>R/</code>: scripts that <strong>do</strong> things, mainly data preparation</li>
+<li class="fragment"><code>data/raw/</code>: the original files, <span class="highlight-peach">never edited by hand</span></li>
+<li class="fragment"><code>data/processed/</code>: clean data plus its README and dictionary</li>
+<li class="fragment"><code>docs/</code>: the rendered report and its source</li>
+<li class="fragment"><code>project.Rproj</code>: opens the project in RStudio</li>
+</ul>
+</section>
+<section id="one-golden-rule" class="slide level2">
+<h2>One golden rule</h2>
+<p><span class="highlight-peach">Raw data is read-only.</span></p>
+<div class="fragment">
+<p>You never overwrite the files in <code>data/raw/</code>. Every cleaning step reads from <code>raw/</code>, transforms in R, and writes to <code>processed/</code>.</p>
+</div>
+<div class="fragment">
+<div class="task">
+<p>This way, the path from messy original to clean dataset is always reproducible: delete <code>processed/</code>, re-run the script, get it back.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="r-scripts" class="title-slide slide level1 center" data-background-color="#4C326A">
+<h1>R scripts</h1>
+
+</section>
+<section id="beyond-quarto" class="slide level2">
+<h2>Beyond Quarto</h2>
+<p>So far you have written everything in <span class="highlight-peach">Quarto</span> (<code>.qmd</code>) files: prose, code, and output woven together.</p>
+<div class="fragment">
+<p>An <span class="highlight-peach">R script</span> (<code>.R</code>) is different: it is <span class="highlight-peach">pure R code</span>, no YAML, no markdown, no chunks.</p>
+</div>
+<div class="fragment">
+<p>Comments start with <code>#</code>; everything else is code that runs top to bottom.</p>
+</div>
+</section>
+<section id="what-a-script-looks-like" class="slide level2">
+<h2>What a script looks like</h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="co"># 01-data-preparation.R</span></span>
+<span id="cb38-2"><a href=""></a><span class="co"># Clean the raw survey data</span></span>
+<span id="cb38-3"><a href=""></a></span>
+<span id="cb38-4"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb38-5"><a href=""></a></span>
+<span id="cb38-6"><a href=""></a>raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/raw/survey.csv"</span>)</span>
+<span id="cb38-7"><a href=""></a></span>
+<span id="cb38-8"><a href=""></a>clean <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb38-9"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(value)) <span class="sc">|&gt;</span></span>
+<span id="cb38-10"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">ymd</span>(date))</span>
+<span id="cb38-11"><a href=""></a></span>
+<span id="cb38-12"><a href=""></a><span class="fu">write_csv</span>(clean, <span class="st">"data/processed/analysis.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="script-or-quarto" class="slide level2">
+<h2>Script or Quarto?</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>R script</strong></p>
+<ul>
+<li>A job to run start to finish</li>
+<li>Data cleaning, downloads</li>
+<li>No narrative needed</li>
+<li>Produces files, not a report</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Quarto</strong></p>
+<ul>
+<li>A document to read</li>
+<li>Analysis with explanation</li>
+<li>Prose, figures, tables</li>
+<li>Renders to HTML or PDF</li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="task">
+<p>A common pattern: scripts prepare the data, Quarto reports on it.</p>
+</div>
+</div>
+</section>
+<section id="running-a-script" class="slide level2">
+<h2>Running a script</h2>
+<ul>
+<li class="fragment">In RStudio: the <strong>Source</strong> button, or <code>Ctrl/Cmd + Shift + S</code></li>
+<li class="fragment">Line by line: <code>Ctrl/Cmd + Enter</code>, just like in a chunk</li>
+<li class="fragment">From another file: <code>source("R/01-data-preparation.R")</code></li>
+</ul>
+<div class="fragment">
+<p><code>source()</code> runs the whole script, as if you had typed every line.</p>
+</div>
+</section>
+<section id="integrating-scripts-with-quarto" class="slide level2">
+<h2>Integrating scripts with Quarto</h2>
+<p>Keep the heavy lifting in a script, then <span class="highlight-peach">call it</span> from your report:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb39-1"><a href=""></a><span class="in">```{r}</span></span>
+<span id="cb39-2"><a href=""></a><span class="co">#| label: prepare</span></span>
+<span id="cb39-3"><a href=""></a><span class="co">#| include: false</span></span>
+<span id="cb39-4"><a href=""></a></span>
+<span id="cb39-5"><a href=""></a><span class="fu">source</span>(<span class="st">"R/01-data-preparation.R"</span>)</span>
+<span id="cb39-6"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<p>The script writes <code>analysis.csv</code>; the report reads it:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb40-1"><a href=""></a><span class="in">```{r}</span></span>
+<span id="cb40-2"><a href=""></a>analysis <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/processed/analysis.csv"</span>)</span>
+<span id="cb40-3"><a href=""></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="why-split-the-work" class="slide level2">
+<h2>Why split the work?</h2>
+<ul>
+<li class="fragment">The report stays focused on <span class="highlight-peach">results</span>, not cleaning code</li>
+<li class="fragment">Slow preparation runs once, not on every render</li>
+<li class="fragment">The same clean data can feed several reports</li>
+<li class="fragment">Each file has one clear job</li>
+</ul>
+<div class="fragment">
+<div class="task">
+<p>This is exactly the structure of the capstone project: a preparation script in <code>R/</code>, a report in <code>docs/</code>.</p>
+</div>
+</div>
+</section>
+<section id="learn-more" class="slide level2">
+<h2>Learn more</h2>
+<div class="learn-more">
+<p><a href="https://r4ds.hadley.nz/data-tidy">https://r4ds.hadley.nz/data-tidy</a></p>
+</div>
+<div class="learn-more">
+<p><a href="https://r4ds.hadley.nz/joins">https://r4ds.hadley.nz/joins</a></p>
+</div>
+<div class="learn-more">
+<p><a href="https://tidyr.tidyverse.org">https://tidyr.tidyverse.org</a></p>
+</div>
+<div class="learn-more">
+<p><a href="https://r4ds.hadley.nz/workflow-scripts">https://r4ds.hadley.nz/workflow-scripts</a></p>
+</div>
+</section>
+<section id="section" class="slide level2" data-background-color="#4C326A">
+<h2></h2>
+<div class="hand-purple-large">
+<p>Questions?</p>
+</div>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>DSFC - Module 7</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="md-07-dsfc_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="md-07-dsfc_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
