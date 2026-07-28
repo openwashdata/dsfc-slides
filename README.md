@@ -28,6 +28,21 @@ The R scripts use base R plus the tidyverse. Open them in RStudio (or
 any editor) and run line by line. Each script follows the corresponding
 module's slides.
 
+## Note for existing clones
+
+On 2026-07-28 the commit history of this repository was rewritten to
+correct wrong author attribution on the commits for modules 6 to 8.
+Every commit from 2026-06-04 onward has a new hash. If you cloned this
+repository before that date, update your copy with:
+
+```sh
+git fetch origin
+git reset --hard origin/main
+```
+
+A plain `git pull` will not work cleanly, as it would try to merge the
+old history with the rewritten one.
+
 ## Course outline
 
 | Module | Topic |
