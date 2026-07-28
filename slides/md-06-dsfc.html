@@ -229,7 +229,7 @@ Adriana Clavijo Daza
 <h2>The YAML header</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href=""></a><span class="pp">---</span></span>
 <span id="cb1-2"><a href=""></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My analysis"</span></span>
-<span id="cb1-3"><a href=""></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Adriana Clavijo Daza"</span></span>
+<span id="cb1-3"><a href=""></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Adriana"</span></span>
 <span id="cb1-4"><a href=""></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">"2026-06-04"</span></span>
 <span id="cb1-5"><a href=""></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
 <span id="cb1-6"><a href=""></a><span class="fu">execute</span><span class="kw">:</span></span>
@@ -264,7 +264,7 @@ Adriana Clavijo Daza
 <tbody>
 <tr class="odd">
 <td><code>label</code></td>
-<td>names the chunk, useful for navigation and errors</td>
+<td>names the chunk, useful for navigation and finding errors</td>
 </tr>
 <tr class="even">
 <td><code>echo</code></td>
@@ -276,7 +276,7 @@ Adriana Clavijo Daza
 </tr>
 <tr class="even">
 <td><code>include</code></td>
-<td>show any output at all</td>
+<td>show code output</td>
 </tr>
 <tr class="odd">
 <td><code>warning</code></td>
@@ -308,7 +308,7 @@ Adriana Clavijo Daza
 <ul>
 <li class="fragment"><code>label</code> <strong>must</strong> start with <code>fig-</code> (figures) or <code>tbl-</code> (tables)</li>
 <li class="fragment">Pair it with <code>fig-cap</code> or <code>tbl-cap</code></li>
-<li class="fragment">Refer to it in the text with <code>@fig-height-mass</code></li>
+<li class="fragment">Refer to it in the text with <code>@fig-label</code> or <code>@tbl-label</code>. In the example above: <code>@fig-height-mass</code></li>
 </ul>
 </div>
 </section></section>
@@ -319,7 +319,7 @@ Adriana Clavijo Daza
 </section>
 <section id="the-four-basic-types" class="slide level2">
 <h2>The four basic types</h2>
-<p>Every value in R has a <span class="highlight-peach">type</span>. The four you will meet daily:</p>
+<p>Every value in R has a <span class="highlight-peach">type</span>.</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -348,7 +348,7 @@ Adriana Clavijo Daza
 </table>
 <div class="fragment">
 <div class="task">
-<p><code>integer</code> and <code>double</code> together are the <strong>numeric</strong> types.</p>
+<p><code>integer</code> and <code>double</code> are the <strong>numeric</strong> types.</p>
 </div>
 </div>
 </section>
@@ -527,7 +527,7 @@ Levels: large medium small</code></pre>
 </section>
 <section id="atomic-vectors" class="slide level2">
 <h2>Atomic vectors</h2>
-<p>The vectors we have used so far are <span class="highlight-peach">atomic</span>: every element has the same type.</p>
+<p>The vectors we have used so far are called <span class="highlight-peach">atomic</span>: every element has the same type.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">172</span>, <span class="dv">167</span>, <span class="dv">96</span>, <span class="dv">202</span>)</span>
 <span id="cb45-2"><a href=""></a>heights</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -588,11 +588,6 @@ Levels: large medium small</code></pre>
 <p><code>str()</code> is your friend: it shows the structure of any object at a glance.</p>
 </div>
 </div>
-</section>
-<section id="why-lists-matter" class="slide level2">
-<h2>Why lists matter</h2>
-<p>You meet lists constantly, sometimes without noticing:</p>
-<p>A data frame <strong>is</strong> a list of equal-length vectors</p>
 </section></section>
 <section>
 <section id="building-data-frames" class="title-slide slide level1 center" data-background-color="#4C326A">
@@ -773,7 +768,7 @@ Levels: large medium small</code></pre>
 </div>
 <div class="fragment">
 <div class="task">
-<p>A frequent source of confusion: <code>tb["height"]</code> looks like the column but will not work where a plain vector is expected, for example in <code>mean()</code>.</p>
+<p><code>tb["height"]</code> will not work where a plain vector is expected, for example <code>mean(tb["height"])</code> returns an error while <code>mean(tb[["height"]])</code> and <code>mean(tb$height)</code> work as expected.</p>
 </div>
 </div>
 </section>
@@ -789,7 +784,7 @@ Levels: large medium small</code></pre>
 </div>
 </div>
 <div class="fragment">
-<p>Compare with <code>select()</code>, which keeps the data frame:</p>
+<p>Compare with <code>select()</code>, which keeps the data frame structure:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
 <span id="cb68-2"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Droid"</span>) <span class="sc">|&gt;</span></span>
@@ -874,11 +869,6 @@ Levels: large medium small</code></pre>
 [1] 0.96</code></pre>
 </div>
 </div>
-<div class="fragment">
-<div class="task">
-<p>Prefer <code>seq_along(x)</code> over <code>1:length(x)</code>. If <code>x</code> is empty, <code>1:0</code> gives <code>c(1, 0)</code> and the loop runs twice instead of not at all.</p>
-</div>
-</div>
 </section>
 <section id="collecting-results" class="slide level2">
 <h2>Collecting results</h2>
@@ -920,7 +910,7 @@ Levels: large medium small</code></pre>
 <section id="loop-or-vectorize" class="slide level2">
 <h2>Loop or vectorize?</h2>
 <ul>
-<li class="fragment">If a vectorized function exists, use it: <code>heights / 100</code> beats any loop</li>
+<li class="fragment">If a vectorized function exists, use it: <code>heights / 100</code> is faster than a loop</li>
 <li class="fragment">Loops shine when steps depend on each other, or for side effects like saving one file per group</li>
 </ul>
 </section>

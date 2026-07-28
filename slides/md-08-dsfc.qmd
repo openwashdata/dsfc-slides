@@ -152,16 +152,6 @@ execute:
 A chunk option set on an individual chunk overrides the document default.
 :::
 
-## Common options: a reference
-
-The header can hold far more than a title. These are the options you will reach for most, grouped by what they affect.
-
-. . .
-
-::: {.task}
-Every option below goes in the YAML header. Format-specific ones sit nested under `format:`.
-:::
-
 ## Document metadata
 
 The front matter the reader sees, all set at the [top level]{.highlight-peach}:
@@ -278,7 +268,7 @@ Bullet lists start each line with a dash:
 
 . . .
 
-Numbered lists use `1.`, `2.`, and so on. A blank line separates a list from the paragraph around it.
+Numbered lists use `1.`, `2.`, and so on. A blank line is needed to separate a list from the paragraph around it.
 
 ## Images and equations
 
@@ -491,7 +481,7 @@ The `|` after `abstract:` lets you write a multi-line value that keeps its line 
 . . .
 
 ::: {.task}
-Rendering to PDF needs a LaTeX engine. Install it once with `quarto install tinytex`.
+Rendering to PDF needs a LaTeX engine. Make sure it's installed before rendering.
 :::
 
 ## Adding citations
@@ -680,21 +670,6 @@ and on the rendered slide you get both the code and its result:
 
 1 + 1
 ```
-
-## Presenting
-
-::: {.incremental}
-- Arrow keys move between slides
-- `F` goes full screen, `Esc` shows an overview
-- `S` opens speaker notes
-- `?` lists every shortcut
-:::
-
-. . .
-
-::: {.task}
-The rendered slides are a single HTML file: publish them to GitHub Pages just like any other page.
-:::
 
 # What else can Quarto build? {background-color="#4C326A"}
 

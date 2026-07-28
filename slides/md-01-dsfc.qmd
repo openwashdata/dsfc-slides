@@ -80,7 +80,7 @@ You will learn to:
 **Good to know**
 
 - Recordings and slides are available on the course website (ignore the original dates)
-- Sessions are pre-recorded, so we will use the live sessions for Q&A and discussion
+- Sessions are pre-recorded, so we will use the live sessions for recaps, Q&A and discussion
 :::
 
 ## Calendar {.smaller}
@@ -93,15 +93,15 @@ You will learn to:
 | Module 4 | Apr 27 | May 10 | May 07 | 14:00 - 16:00 |
 | Module 5 | May 11 | May 24 | May 21 | 14:00 - 16:00 |
 | Module 6 | May 25 | Jun 07 | Jun 04 | 14:00 - 16:00 |
-| Module 7 | Jun 08 | Jun 21 | Jun 18 | 14:00 - 16:00 |
-| Module 8 | Jun 22 | Jun 28 | Jun 25 | 14:00 - 16:00 |
+| Module 7 | Jun 08 | Jun 28 | Jun 25 | 14:00 - 16:00 |
+| Module 8 | Jun 29 | Jul 05 | Jul 02 | 14:00 - 16:00 |
 
 ## Key dates
 
 | Milestone | Date |
 |-----------|------|
-| Capstone project due | Jul 13, 2026 |
-| Final presentation | Jul 16, 2026 (14:00 - 16:00) |
+| Capstone project due | Jul 20, 2026 |
+| Final presentation | Jul 23, 2026 (14:00 - 15:00) |
 
 ## Assignments & quizzes {.smaller}
 
@@ -113,7 +113,7 @@ You will learn to:
 | Module 4 | May 11 | May 11 |
 | Module 5 | May 25 | May 25 |
 | Module 6 | Jun 08 | Jun 08 |
-| Module 7 | Jun 22 | -- |
+| Module 7 | Jun 29 | -- |
 | Module 8 | -- | -- |
 
 # Tools {background-color="#4C326A"}
@@ -153,7 +153,9 @@ It allows you to:
 . . .
 
 ::: {.hand-purple}
-Git = the tool on your computer. GitHub = the online platform.
+Git = the tool on your computer or Posit Cloud .
+
+GitHub = the online platform.
 :::
 
 # R {background-color="#4C326A"}

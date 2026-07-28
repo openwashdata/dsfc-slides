@@ -2,7 +2,7 @@
 title: "Tidy data, joining and project organization"
 subtitle: "Data Science Flipped Classroom - Module 7"
 author: "Adriana Clavijo Daza"
-date: "2026-06-18"
+date: "2026-06-25"
 format:
   revealjs:
     theme: slides.scss

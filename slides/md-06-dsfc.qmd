@@ -41,7 +41,7 @@ Quarto runs the chunks, weaves the results into the text, and renders everything
 ```yaml
 ---
 title: "My analysis"
-author: "Adriana Clavijo Daza"
+author: "Adriana"
 date: "2026-06-04"
 format: html
 execute:
@@ -73,10 +73,10 @@ mean(c(1, 2, 3))
 
 | Option | Effect |
 |--------|--------|
-| `label` | names the chunk, useful for navigation and errors |
+| `label` | names the chunk, useful for navigation and finding errors |
 | `echo` | show the code itself |
 | `eval` | run the code |
-| `include` | show any output at all |
+| `include` | show code output |
 | `warning` | show warnings |
 | `message` | show messages |
 | `error` | render even if the chunk errors |
@@ -101,14 +101,14 @@ starwars |>
 ::: {.incremental}
 - `label` **must** start with `fig-` (figures) or `tbl-` (tables)
 - Pair it with `fig-cap` or `tbl-cap`
-- Refer to it in the text with `@fig-height-mass`
+- Refer to it in the text with `@fig-label` or `@tbl-label`. In the example above: `@fig-height-mass`
 :::
 
 # Data types in R {background-color="#4C326A"}
 
 ## The four basic types
 
-Every value in R has a [type]{.highlight-peach}. The four you will meet daily:
+Every value in R has a [type]{.highlight-peach}. 
 
 | Type | Examples |
 |------|----------|
@@ -120,7 +120,7 @@ Every value in R has a [type]{.highlight-peach}. The four you will meet daily:
 . . .
 
 ::: {.task}
-`integer` and `double` together are the **numeric** types.
+`integer` and `double` are the **numeric** types.
 :::
 
 ## Checking the type with `typeof()`
@@ -280,7 +280,7 @@ as.integer(sizes)
 
 ## Atomic vectors
 
-The vectors we have used so far are [atomic]{.highlight-peach}: every element has the same type.
+The vectors we have used so far are called [atomic]{.highlight-peach}: every element has the same type.
 
 ```{r}
 #| label: atomic-vector
@@ -349,12 +349,6 @@ str(person)
 ::: {.task}
 `str()` is your friend: it shows the structure of any object at a glance.
 :::
-
-## Why lists matter
-
-You meet lists constantly, sometimes without noticing:
-
-A data frame **is** a list of equal-length vectors
 
 # Building data frames {background-color="#4C326A"}
 
@@ -478,7 +472,7 @@ tb["height"]
 . . .
 
 ::: {.task}
-A frequent source of confusion: `tb["height"]` looks like the column but will not work where a plain vector is expected, for example in `mean()`.
+`tb["height"]` will not work where a plain vector is expected, for example `mean(tb["height"])` returns an error while `mean(tb[["height"]])` and `mean(tb$height)` work as expected.
 :::
 
 ## `pull()`: the pipe-friendly extractor
@@ -497,7 +491,7 @@ starwars |>
 
 . . .
 
-Compare with `select()`, which keeps the data frame:
+Compare with `select()`, which keeps the data frame structure:
 
 ```{r}
 #| label: select-compare
@@ -580,12 +574,6 @@ for (i in seq_along(heights)) {
 }
 ```
 
-. . .
-
-::: {.task}
-Prefer `seq_along(x)` over `1:length(x)`. If `x` is empty, `1:0` gives `c(1, 0)` and the loop runs twice instead of not at all.
-:::
-
 ## Collecting results
 
 Create an [output container first]{.highlight-peach}, then fill it position by position:
@@ -631,7 +619,7 @@ Note the `[[`: each column comes out as a plain vector.
 ## Loop or vectorize?
 
 ::: {.incremental}
-- If a vectorized function exists, use it: `heights / 100` beats any loop
+- If a vectorized function exists, use it: `heights / 100` is faster than a loop
 - Loops shine when steps depend on each other, or for side effects like saving one file per group
 :::
 
