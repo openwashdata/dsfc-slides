@@ -1,3 +1,5 @@
+# MODULE 6 - EXERCISES
+
 library(tibble)
 library(dplyr)
 
@@ -16,11 +18,14 @@ tb <- tibble(
 )
 
 # Printing ----
+# A tibble shows only the first 10 rows plus the column types
 
 data.frame(x = 1:100, y = letters[rep(1:4, 25)])
 tibble(x = 1:100, y = letters[rep(1:4, 25)])
 
 # Recycling ----
+# data.frame() recycles 2 values into 4 rows; tibble() only recycles
+# length 1 and throws an error otherwise
 
 data.frame(
   name  = c("Luke", "Leia", "R2-D2", "C-3PO"),
@@ -38,6 +43,7 @@ tibble(
 )
 
 # Column names ----
+# data.frame() rewrites the name as height..cm.; tibble() keeps it
 data.frame(
   name          = c("Luke", "Leia", "R2-D2"),
   `height (cm)` = c(172, 150, 96)
@@ -49,6 +55,7 @@ tibble(
 )
 
 # Use a column just defined ----
+# Works in tibble(), errors in data.frame()
 
 tibble(
   height_cm = c(172, 150, 96),
@@ -96,6 +103,7 @@ characters <- tibble(
   height = c("172", "150", "96", "unknown", "228", "?")
 )
 
+# Returns NA with a warning: height is stored as character
 mean(characters$height)
 
 typeof(characters$height)

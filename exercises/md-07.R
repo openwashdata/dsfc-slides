@@ -1,7 +1,10 @@
+# MODULE 7 - EXERCISES
+
 library(tidyr)
 library(dplyr)
 
 # tidyr example tables ----
+# The same data organized in four different ways; only table1 is tidy
 
 table1
 table2
@@ -94,26 +97,6 @@ table4b
 #   2. join the two results by country and year
 #   3. add a rate column (cases per 10,000 people)
 # Try it before looking at one possible answer below.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 cases <- table4a |>
   pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "cases")

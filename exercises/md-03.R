@@ -1,3 +1,5 @@
+# MODULE 3 - EXERCISES
+
 library(dplyr)
 library(ggplot2)
 
@@ -38,6 +40,7 @@ diamonds |>
 diamonds |>
   filter(clarity %in% c("IF", "VVS1"), cut == "Ideal", price < 2000)
 
+# A dimension of 0 mm is impossible: these rows are data entry errors
 diamonds |>
   filter(x == 0 | y == 0 | z == 0)
 
@@ -109,6 +112,7 @@ diamonds |>
   ))
 
 # transmute ----
+# like mutate(), but keeps only the listed columns
 
 diamonds |>
   transmute(cut, carat, price_per_carat = price / carat)
@@ -157,6 +161,7 @@ diamonds |>
 diamonds |>
   count(cut, color, sort = TRUE)
 
+# wt = price sums price within each group instead of counting rows
 diamonds |>
   count(cut, wt = price, sort = TRUE)
 
@@ -202,5 +207,5 @@ fit <- lm(log(price) ~ log(carat) + cut + color + clarity, data = diamonds_ppc)
 
 broom::tidy(fit, conf.int = TRUE)
 
-# In general, the coefficients of  color and clarity are larger than those of
+# In general, the coefficients of color and clarity are larger than those of
 # cut meaning they have a greater effect on the price.

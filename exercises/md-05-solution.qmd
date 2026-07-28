@@ -1,5 +1,5 @@
 ---
-title: "MODULE 5 - EXERCISES"
+title: "MODULE 5 - SOLUTION"
 subtitle: "Conditions, dates, tables, figures"
 author: "Your name here"
 date: today
@@ -12,7 +12,6 @@ format:
 execute:
   warning: false
   message: false
-  eval: false
 ---
 
 # Atlantic hurricanes
@@ -52,7 +51,7 @@ object called `storms`.
 ```{r}
 #| label: read-data
 
-storms <- read_csv(___)
+storms <- read_csv("../data/storms.csv")
 
 # A quick check of the columns and their types
 glimpse(storms)
@@ -77,7 +76,7 @@ Fill in the `filter()` call below so that:
 #| label: filter
 
 hurricanes <- storms |>
-  filter(___)
+  filter(status == "hurricane", year >= 2010, year <= 2022)
 
 # How many rows did you end up with?
 nrow(hurricanes)
@@ -113,12 +112,19 @@ You will now add three new columns to `hurricanes`:
 
 hurricanes <- hurricanes |>
   mutate(
-    date       = ___,
-    month_name = ___,
+    date       = make_date(year, month, day),
+    month_name = month(date, label = TRUE, abbr = FALSE),
     intensity  = case_when(
-      ___
+      wind < 83  ~ "Cat 1",
+      wind < 96  ~ "Cat 2",
+      wind < 113 ~ "Cat 3",
+      wind < 137 ~ "Cat 4",
+      .default   = "Cat 5"
     ),
-    intensity  = factor(intensity, levels = ___)
+    intensity  = factor(
+      intensity,
+      levels = c("Cat 1", "Cat 2", "Cat 3", "Cat 4", "Cat 5")
+    )
   )
 
 hurricanes |>
@@ -153,14 +159,14 @@ will be numbered and you can refer to it later as `@tbl-intensity`.
 #| tbl-cap: "Atlantic hurricanes 2010-2022 by Saffir-Simpson category, sorted by mean wind speed"
 
 hurricanes |>
-  group_by(___) |>
+  group_by(intensity) |>
   summarise(
-    n            = ___,
-    mean_wind    = ___,
-    min_pressure = ___
+    n            = n(),
+    mean_wind    = mean(wind, na.rm = TRUE),
+    min_pressure = min(pressure, na.rm = TRUE)
   ) |>
-  arrange(___) |>
-  # here add code to print table
+  arrange(desc(mean_wind)) |>
+  knitr::kable(digits = 1)
 ```
 
 ::: {.callout-tip}
@@ -173,18 +179,17 @@ Plot the **storm tracks** on a map of the Atlantic basin.
 
 Build the plot step by step:
 
-- Country outlines come from `map_data("world")`, which needs the
-  `maps` package (install with `install.packages("maps")` if you do
-  not have it yet). The first line of the chunk loads them into a
-  data frame called `world`.
+- Get country outlines with `world <- map_data("world")`
+  (needs the `maps` package: `install.packages("maps")`).
 - In the `ggplot()` call, map `long` to `x` and `lat` to `y`.
-- Draw the coastline first with `geom_polygon()`, using the `world`
-  data, so the storm tracks are drawn on top of it.
-- Use `geom_path()` to connect the positions of each storm, with
+- Draw the coastline first with `geom_polygon()` using the `world`
+  data and `aes(x = long, y = lat, group = group)`. This way the
+  storm tracks will be drawn on top.
+- Add `geom_path()` to connect the positions of each storm, with
   `aes(group = name)` so each storm gets its own line. Color the
   lines by `intensity`.
-- `coord_quickmap()` already has reasonable `xlim` and `ylim` for the
-  Atlantic basin: leave those in place.
+- Use `coord_quickmap(xlim = ..., ylim = ...)` to crop the view to
+  the Atlantic basin.
 - Give the plot a title and informative axis labels.
 
 The chunk options already set a `fig-` label and a `fig-cap`, so you
@@ -198,16 +203,16 @@ will be able to refer to the figure as `@fig-tracks`.
 
 world <- map_data("world")
 
-ggplot(hurricanes, aes(x = ___, y = ___)) +
+ggplot(hurricanes, aes(x = long, y = lat)) +
   geom_polygon(
     data = world,
     aes(x = long, y = lat, group = group),
     fill = "grey92", color = "white"
   ) +
-  geom_path(aes(group = ___, color = ___), alpha = 0.6) +
+  geom_path(aes(group = name, color = intensity), alpha = 0.6) +
   coord_quickmap(xlim = c(-110, -10), ylim = c(5, 55)) +
   labs(
-    title = ___,
+    title = "Atlantic hurricane tracks, 2010-2022",
     x     = "Longitude",
     y     = "Latitude",
     color = "Category"
@@ -222,5 +227,11 @@ the table and the figure. **Keep the `@tbl-...` and `@fig-...`
 references**, that is what makes Quarto turn them into "Table 1" and
 "Figure 1" with clickable links.
 
-- Loking at @tbl-... 
-- @fig-... shows...
+- Looking at @tbl-intensity, Category 1 hurricanes are by far the most
+  common observation in 2010-2022, while Category 5 events are very rare. 
+  Mean wind speed and minimum pressure move in the expected directions: 
+  stronger categories have stronger winds and lower central pressures.
+- @fig-tracks shows that hurricane activity concentrates over the
+  Caribbean Sea, the Gulf of Mexico, and the western Atlantic, with
+  the most intense (Cat 4 and Cat 5) segments occurring mostly over
+  tropical waters.
