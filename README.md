@@ -1,24 +1,26 @@
 # Data Science Flipped Classroom
 
-Slides and R scripts for the **Data Science Flipped Classroom (DSFC)**
-course: an 8-module, hands-on introduction to data analysis and
-reproducible research with R and the tidyverse.
+Slides and R exercises for the **Data Science Flipped Classroom (DSFC)**, an
+asynchronous iteration of the course 
+[**Data Science for Open WASH Data**](https://ds4owd-002.github.io/website/):
+an 8-module, hands-on introduction to data analysis and reproducible research 
+with R and the tidyverse.
 
 ## What's in here
 
 - `slides/` : Quarto source files for the slide decks (`md-01-dsfc.qmd`,
   `md-02-dsfc.qmd`, ...) and their rendered HTML and PDF versions. The
   `.scss` file holds the shared theme.
-- `exercises/` : R scripts that go alongside each module (`md-02.R`,
-  `md-03.R`, ...), with the code used in the live sessions.
-- `dsfc.Rproj` : RStudio project file, in case you want to open
-  everything at once.
+- `exercises/` : R scripts and Quarto files that go alongside each 
+  module (`md-02.R`, `md-03.R`, ...), with the code used in the live sessions.
+- `dsfc.Rproj` : RStudio project file, in case you want to open everything 
+  at once.
 
 ## Viewing the slides
 
 The quickest way is to open the `.pdf` files directly. If you'd rather
 look at the source, the `.qmd` files are plain text and render to
-Reveal.js.
+`html`.
 
 ## Running the scripts
 
@@ -38,7 +40,5 @@ module's slides.
 | 6 | Data types, vectors & loops |
 | 7 | Pivoting & joining data |
 | 8 | Publishing with Quarto & GitHub Pages |
+| - | Capstone project presentation |
 
-## Author
-
-Adriana Clavijo Daza
